@@ -11,5 +11,15 @@ module ConsoleShogi
     def matrix
       @pieces
     end
+
+    def change_pirce(from:, to:)
+      t = @pieces[*to]
+      @pieces[*to] = @pieces[*from]
+      @pieces[*from] = t
+    end
+
+    private
+
+    attr_reader :pieces
   end
 end
