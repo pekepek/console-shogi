@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require_relative "lib/console/shogi/version"
+require_relative "lib/console_shogi/version"
 
 Gem::Specification.new do |spec|
   spec.name = "console-shogi"
-  spec.version = Console::Shogi::VERSION
+  spec.version = ConsoleShogi::VERSION
   spec.authors = ["pekepek"]
   spec.email = ["ishihata@33i.co.jp"]
 
