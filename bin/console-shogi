@@ -1,3 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'bundler/setup'
+require 'console_shogi'
+require 'pry'
+
+ConsoleShogi.game_start
