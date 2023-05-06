@@ -12,7 +12,7 @@ module ConsoleShogi
       @pieces
     end
 
-    def change_pirce(from:, to:)
+    def change_piece(from:, to:)
       t = @pieces[*to]
       @pieces[*to] = @pieces[*from]
       @pieces[*from] = t

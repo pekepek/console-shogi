@@ -6,10 +6,11 @@ module ConsoleShogi
   class Game
     def initialize
       @board = Board.new
+      @terminal_operator = TerminalOperator.new
     end
 
     def start
-      TerminalOperator.print_board(board: board)
+      terminal_operator.print_board(board: board)
 
       while key = STDIN.getch
         # NOTE Ctrl-C を押したら終了
@@ -19,37 +20,32 @@ module ConsoleShogi
         elsif key == "\e" && STDIN.getch == "["
           key = STDIN.getch
 
-          TerminalOperator.move_cursor(key)
+          terminal_operator.move_cursor(key)
         # NOTE Enter を押したら駒を移動
         elsif key == "\r"
-          from_position = TerminalOperator.get_cursor_position
+          from_piece_index = terminal_operator.squares_index
 
           while key = STDIN.getch
             if key == "\e" && STDIN.getch == "["
               key = STDIN.getch
 
-              TerminalOperator.move_cursor(key)
+              terminal_operator.move_cursor(key)
             elsif key == "\r"
-              to_position = TerminalOperator.get_cursor_position
+              to_piece_index = terminal_operator.squares_index
 
-              to_position[:x] = (to_position[:x] - 1) / 2 + 1
-              from_position[:x] = (from_position[:x] - 1) / 2 + 1
-
-             board.change_pirce(from: [from_position[:y] - 1, from_position[:x] - 1], to: [to_position[:y] - 1, to_position[:x] - 1])
+              board.change_piece(from: [from_piece_index[:y], from_piece_index[:x]], to: [to_piece_index[:y], to_piece_index[:x]])
 
               break
             end
           end
         end
 
-        position = TerminalOperator.get_cursor_position
-
-        TerminalOperator.print_board(board: board, cursor_position: position)
+        terminal_operator.print_board(board: board)
       end
     end
 
     private
 
-    attr_reader :board
+    attr_reader :board, :terminal_operator
   end
 end
