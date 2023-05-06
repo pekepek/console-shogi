@@ -2,6 +2,8 @@
 
 module ConsoleShogi
   class Piece
+    attr_reader :player
+
     SENTE = :sente
     GOTE = :gote
 
@@ -34,7 +36,19 @@ module ConsoleShogi
     end
 
     def none?
-      false
+      self::class == None
+    end
+
+    def kaku?
+      self::class == Kaku
+    end
+
+    def hisha?
+      self::class == Hisha
+    end
+
+    def kyosha?
+      self::class == Kyosha
     end
 
     def moves
@@ -46,10 +60,6 @@ module ConsoleShogi
         ms.map {|m| m.transform_values {|v| v * -1 } }
       end
     end
-
-    private
-
-    attr_reader :player
   end
 
   class None < Piece

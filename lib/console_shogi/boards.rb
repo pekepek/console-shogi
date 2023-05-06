@@ -18,15 +18,15 @@ module ConsoleShogi
           Kyosha.new(player: Piece::GOTE)
         ],
         [
-          None.new(player: Piece::GOTE),
+          None.new,
           Kaku.new(player: Piece::GOTE),
-          None.new(player: Piece::GOTE),
-          None.new(player: Piece::GOTE),
-          None.new(player: Piece::GOTE),
-          None.new(player: Piece::GOTE),
-          None.new(player: Piece::GOTE),
+          None.new,
+          None.new,
+          None.new,
+          None.new,
+          None.new,
           Hisha.new(player: Piece::GOTE),
-          None.new(player: Piece::GOTE)
+          None.new
         ],
         [
           Hu.new(player: Piece::GOTE),
@@ -84,15 +84,15 @@ module ConsoleShogi
           Hu.new(player: Piece::SENTE)
         ],
         [
-          None.new(player: Piece::SENTE),
+          None.new,
           Kaku.new(player: Piece::SENTE),
-          None.new(player: Piece::SENTE),
-          None.new(player: Piece::SENTE),
-          None.new(player: Piece::SENTE),
-          None.new(player: Piece::SENTE),
-          None.new(player: Piece::SENTE),
+          None.new,
+          None.new,
+          None.new,
+          None.new,
+          None.new,
           Hisha.new(player: Piece::SENTE),
-          None.new(player: Piece::SENTE)
+          None.new
         ],
         [
           Kyosha.new(player: Piece::SENTE),
