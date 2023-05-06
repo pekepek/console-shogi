@@ -3,7 +3,7 @@
 require_relative 'console_shogi/version'
 require_relative 'console_shogi/game'
 require_relative 'console_shogi/board'
-require_relative 'console_shogi/viewer'
+require_relative 'console_shogi/terminal_operator'
 require_relative 'console_shogi/piece'
 require_relative 'console_shogi/boards'
 
