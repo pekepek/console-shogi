@@ -21,9 +21,9 @@ module ConsoleShogi
           vector.each_with_index do |piece, j|
             print (i + j) % 2 == 0 ? "\e[42m" : "\e[43m"
 
-            if piece.gote_player?
+            if piece.player.gote?
               print "\e[30m"
-            elsif piece.sente_player?
+            elsif piece.player.sente?
               print "\e[37m"
             end
 

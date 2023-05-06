@@ -2,6 +2,7 @@
 
 require_relative 'console_shogi/version'
 require_relative 'console_shogi/game'
+require_relative 'console_shogi/player'
 require_relative 'console_shogi/board'
 require_relative 'console_shogi/terminal_operator'
 require_relative 'console_shogi/piece'

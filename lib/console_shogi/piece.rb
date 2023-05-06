@@ -4,9 +4,6 @@ module ConsoleShogi
   class Piece
     attr_reader :player
 
-    SENTE = :sente
-    GOTE = :gote
-
     def initialize(player: nil)
       @player = player
     end
@@ -25,14 +22,6 @@ module ConsoleShogi
 
     def display_name
       self::class::DISPLAY_NAME
-    end
-
-    def sente_player?
-      player == SENTE
-    end
-
-    def gote_player?
-      player == GOTE
     end
 
     def none?
@@ -54,7 +43,7 @@ module ConsoleShogi
     def moves
       ms = base_moves
 
-      if sente_player?
+      if player.sente?
         ms
       else
         ms.map {|m| m.transform_values {|v| v * -1 } }
@@ -72,6 +61,10 @@ module ConsoleShogi
 
     def moves
       []
+    end
+
+    def player
+      NonPlayer.new
     end
   end
 

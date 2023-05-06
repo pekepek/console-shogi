@@ -7,48 +7,37 @@ module ConsoleShogi
     NEW_BOARD =
       [
         [
-          Kyosha.new(player: Piece::GOTE),
-          Keima.new(player: Piece::GOTE),
-          Gin.new(player: Piece::GOTE),
-          Kin.new(player: Piece::GOTE),
-          Ohsho.new(player: Piece::GOTE),
-          Kin.new(player: Piece::GOTE),
-          Gin.new(player: Piece::GOTE),
-          Keima.new(player: Piece::GOTE),
-          Kyosha.new(player: Piece::GOTE)
+          Kyosha.new(player: Player.new(teban: Player::Teban::GOTE)),
+          Keima.new(player: Player.new(teban: Player::Teban::GOTE)),
+          Gin.new(player: Player.new(teban: Player::Teban::GOTE)),
+          Kin.new(player: Player.new(teban: Player::Teban::GOTE)),
+          Ohsho.new(player: Player.new(teban: Player::Teban::GOTE)),
+          Kin.new(player: Player.new(teban: Player::Teban::GOTE)),
+          Gin.new(player: Player.new(teban: Player::Teban::GOTE)),
+          Keima.new(player: Player.new(teban: Player::Teban::GOTE)),
+          Kyosha.new(player: Player.new(teban: Player::Teban::GOTE))
         ],
         [
           None.new,
-          Kaku.new(player: Piece::GOTE),
+          Kaku.new(player: Player.new(teban: Player::Teban::GOTE)),
           None.new,
           None.new,
           None.new,
           None.new,
           None.new,
-          Hisha.new(player: Piece::GOTE),
+          Hisha.new(player: Player.new(teban: Player::Teban::GOTE)),
           None.new
         ],
         [
-          Hu.new(player: Piece::GOTE),
-          Hu.new(player: Piece::GOTE),
-          Hu.new(player: Piece::GOTE),
-          Hu.new(player: Piece::GOTE),
-          Hu.new(player: Piece::GOTE),
-          Hu.new(player: Piece::GOTE),
-          Hu.new(player: Piece::GOTE),
-          Hu.new(player: Piece::GOTE),
-          Hu.new(player: Piece::GOTE)
-        ],
-        [
-          None.new,
-          None.new,
-          None.new,
-          None.new,
-          None.new,
-          None.new,
-          None.new,
-          None.new,
-          None.new
+          Hu.new(player: Player.new(teban: Player::Teban::GOTE)),
+          Hu.new(player: Player.new(teban: Player::Teban::GOTE)),
+          Hu.new(player: Player.new(teban: Player::Teban::GOTE)),
+          Hu.new(player: Player.new(teban: Player::Teban::GOTE)),
+          Hu.new(player: Player.new(teban: Player::Teban::GOTE)),
+          Hu.new(player: Player.new(teban: Player::Teban::GOTE)),
+          Hu.new(player: Player.new(teban: Player::Teban::GOTE)),
+          Hu.new(player: Player.new(teban: Player::Teban::GOTE)),
+          Hu.new(player: Player.new(teban: Player::Teban::GOTE))
         ],
         [
           None.new,
@@ -73,37 +62,48 @@ module ConsoleShogi
           None.new
         ],
         [
-          Hu.new(player: Piece::SENTE),
-          Hu.new(player: Piece::SENTE),
-          Hu.new(player: Piece::SENTE),
-          Hu.new(player: Piece::SENTE),
-          Hu.new(player: Piece::SENTE),
-          Hu.new(player: Piece::SENTE),
-          Hu.new(player: Piece::SENTE),
-          Hu.new(player: Piece::SENTE),
-          Hu.new(player: Piece::SENTE)
-        ],
-        [
-          None.new,
-          Kaku.new(player: Piece::SENTE),
           None.new,
           None.new,
           None.new,
           None.new,
           None.new,
-          Hisha.new(player: Piece::SENTE),
+          None.new,
+          None.new,
+          None.new,
           None.new
         ],
         [
-          Kyosha.new(player: Piece::SENTE),
-          Keima.new(player: Piece::SENTE),
-          Gin.new(player: Piece::SENTE),
-          Kin.new(player: Piece::SENTE),
-          Ohsho.new(player: Piece::SENTE),
-          Kin.new(player: Piece::SENTE),
-          Gin.new(player: Piece::SENTE),
-          Keima.new(player: Piece::SENTE),
-          Kyosha.new(player: Piece::SENTE)
+          Hu.new(player: Player.new(teban: Player::Teban::SENTE)),
+          Hu.new(player: Player.new(teban: Player::Teban::SENTE)),
+          Hu.new(player: Player.new(teban: Player::Teban::SENTE)),
+          Hu.new(player: Player.new(teban: Player::Teban::SENTE)),
+          Hu.new(player: Player.new(teban: Player::Teban::SENTE)),
+          Hu.new(player: Player.new(teban: Player::Teban::SENTE)),
+          Hu.new(player: Player.new(teban: Player::Teban::SENTE)),
+          Hu.new(player: Player.new(teban: Player::Teban::SENTE)),
+          Hu.new(player: Player.new(teban: Player::Teban::SENTE))
+        ],
+        [
+          None.new,
+          Kaku.new(player: Player.new(teban: Player::Teban::SENTE)),
+          None.new,
+          None.new,
+          None.new,
+          None.new,
+          None.new,
+          Hisha.new(player: Player.new(teban: Player::Teban::SENTE)),
+          None.new
+        ],
+        [
+          Kyosha.new(player: Player.new(teban: Player::Teban::SENTE)),
+          Keima.new(player: Player.new(teban: Player::Teban::SENTE)),
+          Gin.new(player: Player.new(teban: Player::Teban::SENTE)),
+          Kin.new(player: Player.new(teban: Player::Teban::SENTE)),
+          Ohsho.new(player: Player.new(teban: Player::Teban::SENTE)),
+          Kin.new(player: Player.new(teban: Player::Teban::SENTE)),
+          Gin.new(player: Player.new(teban: Player::Teban::SENTE)),
+          Keima.new(player: Player.new(teban: Player::Teban::SENTE)),
+          Kyosha.new(player: Player.new(teban: Player::Teban::SENTE))
         ]
       ]
   end

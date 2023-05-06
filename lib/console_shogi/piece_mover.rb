@@ -45,7 +45,7 @@ module ConsoleShogi
 
       to_piece = board.fetch_piece(x: to[:x], y: to[:y])
 
-      return false if piece.player == to_piece.player
+      return false if piece.player.teban == to_piece.player.teban
 
       return true unless piece.kaku? || piece.hisha? || piece.kyosha?
 
