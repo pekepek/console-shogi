@@ -12,10 +12,18 @@ module ConsoleShogi
       @pieces
     end
 
+    def fetch_piece(x:, y:)
+      @pieces[y, x]
+    end
+
     def change_piece(from:, to:)
-      t = @pieces[*to]
-      @pieces[*to] = @pieces[*from]
-      @pieces[*from] = t
+      from_piece = @pieces[from[:y], from[:x]]
+      diff = {x: to[:x] - from[:x], y: to[:y] - from[:y]}
+
+      return if from_piece.moves.none? {|m| m[:x] == diff[:x] && m[:y] == diff[:y] }
+
+      @pieces[from[:y], from[:x]] = @pieces[to[:y], to[:x]]
+      @pieces[to[:y], to[:x]] = from_piece
     end
 
     private

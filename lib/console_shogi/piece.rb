@@ -2,8 +2,11 @@
 
 module ConsoleShogi
   class Piece
-    def initialize(player_number: nil)
-      @player_number = player_number
+    SENTE = :sente
+    GOTE = :gote
+
+    def initialize(player: nil)
+      @player = player
     end
 
     def move
@@ -22,61 +25,158 @@ module ConsoleShogi
       self::class::DISPLAY_NAME
     end
 
-    def player_one?
-      player_number == 1
+    def sente_player?
+      player == SENTE
     end
 
-    def player_two?
-      player_number == 2
+    def gote_player?
+      player == GOTE
+    end
+
+    def none?
+      false
+    end
+
+    def moves
+      ms = base_moves
+
+      if sente_player?
+        ms
+      else
+        ms.map {|m| m.transform_values {|v| v * -1 } }
+      end
     end
 
     private
 
-    attr_reader :player_number
+    attr_reader :player
   end
 
   class None < Piece
     NUMBER = 0
     DISPLAY_NAME = '　'
+
+    def none?
+      true
+    end
+
+    def moves
+      []
+    end
   end
 
   class Hu < Piece
     NUMBER = 1
     DISPLAY_NAME = '歩'
+
+    def base_moves
+      [
+        {x: 0, y: -1}
+      ]
+    end
   end
 
   class Kyosha < Piece
     NUMBER = 2
     DISPLAY_NAME = '香'
+
+    def base_moves
+      (1..8).map {|n|
+        {x: 0, y: -1 * n}
+      }
+    end
   end
 
   class Keima < Piece
     NUMBER = 3
     DISPLAY_NAME = '桂'
+
+    def base_moves
+      [
+        {x: 1, y: -2},
+        {x: -1, y: -2},
+      ]
+    end
   end
 
   class Gin < Piece
     NUMBER = 4
     DISPLAY_NAME = '銀'
+
+    def base_moves
+      [
+        {x: -1, y: -1},
+        {x: 0, y: -1},
+        {x: 1, y: -1},
+        {x: 1, y: 1},
+        {x: -1, y: 1}
+      ]
+    end
   end
 
   class Kin < Piece
     NUMBER = 5
     DISPLAY_NAME = '金'
+
+    def base_moves
+      [
+        {x: -1, y: -1},
+        {x: 0, y: -1},
+        {x: 1, y: -1},
+        {x: 1, y: 0},
+        {x: -1, y: 0},
+        {x: 0, y: 1}
+      ]
+    end
   end
 
   class Kaku < Piece
     NUMBER = 6
     DISPLAY_NAME = '角'
+
+    def base_moves
+      (1..8).flat_map {|n|
+        [
+          {x: -1 * n, y: -1 * n},
+          {x: 1 * n, y: -1 * n},
+          {x: -1 * n, y: 1 * n},
+          {x: 1 * n, y: 1 * n}
+        ]
+      }
+    end
   end
 
   class Hisha < Piece
     NUMBER = 7
     DISPLAY_NAME = '飛'
+
+    def base_moves
+      (1..8).flat_map {|n|
+        [
+          {x: 0, y: -1 * n},
+          {x: 0, y: 1 * n},
+          {x: -1 * n, y: 0},
+          {x: 1 * n, y: 0}
+        ]
+      }
+    end
   end
 
   class Ohsho < Piece
     NUMBER = 8
     DISPLAY_NAME = '王'
+
+    def base_moves
+      [
+        {x: -1, y: -1},
+        {x: 0, y: -1},
+        {x: 1, y: -1},
+        {x: 1, y: 0},
+        {x: -1, y: 0},
+        {x: -1, y: 1},
+        {x: 0, y: 1},
+        {x: 1, y: 1}
+      ]
+    end
   end
 end

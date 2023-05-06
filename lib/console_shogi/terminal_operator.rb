@@ -12,8 +12,6 @@ module ConsoleShogi
     end
 
     def print_board(board:)
-      reload_cursor_position_in_stdin!
-
       # 画面をクリア
       print "\e[2J"
 
@@ -24,9 +22,9 @@ module ConsoleShogi
         vector.each_with_index do |piece, j|
           print (i + j) % 2 == 0 ? "\e[42m" : "\e[43m"
 
-          if piece.player_one?
+          if piece.gote_player?
             print "\e[30m"
-          elsif piece.player_two?
+          elsif piece.sente_player?
             print "\e[37m"
           end
 

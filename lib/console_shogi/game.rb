@@ -25,6 +25,10 @@ module ConsoleShogi
         elsif key == "\r"
           from_piece_index = terminal_operator.squares_index
 
+          piece = board.fetch_piece(x: from_piece_index[:x], y: from_piece_index[:y])
+
+          next if piece.nil? || piece.none?
+
           while key = STDIN.getch
             if key == "\e" && STDIN.getch == "["
               key = STDIN.getch
@@ -33,7 +37,10 @@ module ConsoleShogi
             elsif key == "\r"
               to_piece_index = terminal_operator.squares_index
 
-              board.change_piece(from: [from_piece_index[:y], from_piece_index[:x]], to: [to_piece_index[:y], to_piece_index[:x]])
+              board.change_piece(
+                from: {x: from_piece_index[:x], y: from_piece_index[:y]},
+                to: {x: to_piece_index[:x], y: to_piece_index[:y]}
+              )
 
               break
             end
