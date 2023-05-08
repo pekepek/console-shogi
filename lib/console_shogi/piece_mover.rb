@@ -20,7 +20,7 @@ module ConsoleShogi
 
           return unless can_move?(piece: target_piece, from: from_piece_index, to: to_piece_index)
 
-          board.change_piece!(
+          board.move_piece!(
             from: {x: from_piece_index[:x], y: from_piece_index[:y]},
             to: {x: to_piece_index[:x], y: to_piece_index[:y]}
           )

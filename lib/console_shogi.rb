@@ -6,7 +6,8 @@ require_relative 'console_shogi/player'
 require_relative 'console_shogi/board'
 require_relative 'console_shogi/terminal_operator'
 require_relative 'console_shogi/piece'
-require_relative 'console_shogi/boards'
+
+require_relative 'console_shogi/new_board_builder'
 require_relative 'console_shogi/piece_mover'
 
 module ConsoleShogi

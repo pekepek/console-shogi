@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'matrix'
-
 module ConsoleShogi
   class Player
     module Teban
@@ -10,9 +8,11 @@ module ConsoleShogi
     end
 
     attr_reader :teban
+    attr_accessor :hand_pieces
 
     def initialize(teban: nil)
       @teban = teban
+      @hand_pieces = []
     end
 
     def sente?
@@ -21,6 +21,10 @@ module ConsoleShogi
 
     def gote?
       teban == Teban::GOTE
+    end
+
+    def capture_piece(piece)
+      @hand_pieces << piece
     end
   end
 

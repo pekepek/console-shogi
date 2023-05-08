@@ -25,7 +25,7 @@ module ConsoleShogi
     end
 
     def none?
-      self::class == None
+      self::class == NonePiece
     end
 
     def kaku?
@@ -49,9 +49,13 @@ module ConsoleShogi
         ms.map {|m| m.transform_values {|v| v * -1 } }
       end
     end
+
+    def change_player!(player)
+      @player = player
+    end
   end
 
-  class None < Piece
+  class NonePiece < Piece
     NUMBER = 0
     DISPLAY_NAME = '　'
 
