@@ -4,10 +4,8 @@ require 'matrix'
 
 module ConsoleShogi
   class Board
-    def initialize(pieces:, sente_player:, gote_player:)
+    def initialize(pieces:)
       @pieces = Matrix.rows(pieces)
-      @sente_player = sente_player
-      @gote_player = gote_player
     end
 
     def matrix
@@ -28,14 +26,12 @@ module ConsoleShogi
       return if to_piece.none?
 
       # NOTE 駒を取る、リファクタする
-      player = to_piece.player.sente? ? gote_player : sente_player
-
-      to_piece.change_player!(player)
-      player.capture_piece(to_piece)
+      #      from_piece.player で player 取るの違和感
+      from_piece.player.capture_piece!(to_piece)
     end
 
     private
 
-    attr_reader :pieces, :sente_player, :gote_player
+    attr_reader :pieces
   end
 end

@@ -7,12 +7,11 @@ module ConsoleShogi
       GOTE = :gote
     end
 
-    attr_reader :teban
-    attr_accessor :hand_pieces
+    attr_reader :teban, :komadai
 
     def initialize(teban: nil)
       @teban = teban
-      @hand_pieces = []
+      @komadai = Komadai.new
     end
 
     def sente?
@@ -23,8 +22,11 @@ module ConsoleShogi
       teban == Teban::GOTE
     end
 
-    def capture_piece(piece)
-      @hand_pieces << piece
+    def capture_piece!(piece)
+      @komadai.expand! unless komadai.have_space?
+
+      piece.change_player!(self)
+      komadai.put(piece: piece)
     end
   end
 

@@ -76,34 +76,23 @@ module ConsoleShogi
       PIECE_STAND_START_X = 21
       PIECE_STAND_GOTE_START_Y = 1
       PIECE_STAND_SENTE_START_Y = 7
-      DEFAULT_PIECE_STAND_SIZE = 9
-      EMPTY_PIECES = ['　'] * DEFAULT_PIECE_STAND_SIZE
 
       # TODO view 用の Player 作って整理する
       def print_piece_stand(player)
-        stand_times = (player.hand_pieces.count / DEFAULT_PIECE_STAND_SIZE).nonzero? || 1
-        display_names = hand_piece_display_names(player, stand_times)
-
         start_y = player.sente? ? PIECE_STAND_SENTE_START_Y : PIECE_STAND_GOTE_START_Y
         text_color = player.sente? ? EscapeSequence::TEXT_COLOR_SENTE : EscapeSequence::TEXT_COLOR_GOTE
 
-        display_names.each_slice(DEFAULT_PIECE_STAND_SIZE / 3 * stand_times).with_index do |ns, i|
+        player.komadai.pieces.row_vectors.each_with_index do |row_pieces, i|
           print "\e[#{start_y + i};#{PIECE_STAND_START_X}H"
           print EscapeSequence::BACKGROUND_COLOR_YELLOW
           print text_color
 
-          ns.each do |n|
-            print n
+          row_pieces.each do |p|
+            print p.display_name
           end
 
           print EscapeSequence::RESET
         end
-      end
-
-      def hand_piece_display_names(player, stand_times)
-        display_names = player.hand_pieces.map(&:display_name)
-
-        (EMPTY_PIECES * stand_times).zip(display_names).map {|a, b| b || a }
       end
 
       def reload_cursor_position_in_stdin!

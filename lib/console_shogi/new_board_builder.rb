@@ -105,9 +105,7 @@ module ConsoleShogi
               Keima.new(player: sente_player),
               Kyosha.new(player: sente_player)
             ]
-          ],
-          sente_player: sente_player,
-          gote_player: gote_player
+          ]
         )
       end
     end
