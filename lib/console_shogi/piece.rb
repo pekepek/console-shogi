@@ -59,10 +59,6 @@ module ConsoleShogi
     NUMBER = 0
     DISPLAY_NAME = '　'
 
-    def none?
-      true
-    end
-
     def moves
       []
     end

@@ -20,6 +20,10 @@ module ConsoleShogi
       pieces.any?(&:none?)
     end
 
+    def fetch_piece(x:, y:)
+      pieces[y, x]
+    end
+
     def put(piece:)
       index = pieces.index(&:none?)
 
@@ -27,11 +31,20 @@ module ConsoleShogi
 
       @pieces[*index] = piece
 
-      column_num = pieces.count / 3
-      @pieces = Matrix.rows(pieces.sort_by {|p| -p.number }.each_slice(column_num).to_a)
+      @pieces = sort_pieces
+    end
+
+    def pick_up_piece!(from:)
+      @pieces[from[:y], from[:x]] = NonePiece.new
+      @pieces = sort_pieces
     end
 
     private
+
+    def sort_pieces
+      column_num = pieces.count / 3
+      Matrix.rows(pieces.sort_by {|p| -p.number }.each_slice(column_num).to_a)
+    end
 
     def empty_pieces
       Matrix.rows(

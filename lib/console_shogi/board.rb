@@ -16,6 +16,10 @@ module ConsoleShogi
       pieces[y, x]
     end
 
+    def put_piece!(piece:, to:)
+      @pieces[to[:y], to[:x]] = piece
+    end
+
     def move_piece!(from:, to:)
       from_piece = @pieces[from[:y], from[:x]]
       @pieces[from[:y], from[:x]] = NonePiece.new

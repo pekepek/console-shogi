@@ -10,6 +10,7 @@ require_relative 'console_shogi/komadai'
 require_relative 'console_shogi/terminal_operator'
 require_relative 'console_shogi/new_board_builder'
 require_relative 'console_shogi/piece_mover'
+require_relative 'console_shogi/piece_mover_on_komadai'
 
 module ConsoleShogi
   class Error < StandardError; end

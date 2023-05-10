@@ -11,7 +11,7 @@ module ConsoleShogi
     end
 
     def start
-      TerminalOperator.print_board(board: board, sente_player: sente_player, gote_player: gote_player)
+      TerminalOperator.print_board(board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
 
       while key = STDIN.getch
         # NOTE Ctrl-C を押したら終了
@@ -24,10 +24,20 @@ module ConsoleShogi
           TerminalOperator.move_cursor(key)
         # NOTE Enter を押したら駒を移動
         elsif key == "\r"
-          PieceMover.new(board: board, from: TerminalOperator.squares_index).move
+          # TODO このまま Hash にするかは要検討
+          index = TerminalOperator.squares_index
+
+          case index[:location]
+          when :board
+            PieceMover.new(board: board, from: index).move!
+          when :sente_komadai
+            PieceMoverOnKomadai.new(board: board, komadai: sente_player.komadai, from: index).move!
+          when :gote_komadai
+            PieceMoverOnKomadai.new(board: board, komadai: gote_player.komadai, from: index).move!
+          end
         end
 
-        TerminalOperator.print_board(board: board, sente_player: sente_player, gote_player: gote_player)
+        TerminalOperator.print_board(board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
       end
     end
 

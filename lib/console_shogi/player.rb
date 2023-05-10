@@ -11,6 +11,7 @@ module ConsoleShogi
 
     def initialize(teban: nil)
       @teban = teban
+      # TODO Komadai, Piece, Player が循環してる
       @komadai = Komadai.new
     end
 

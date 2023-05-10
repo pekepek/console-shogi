@@ -7,6 +7,10 @@ module ConsoleShogi
 
       HORIZONTAL_DISTANCE = 2
 
+      KOMADAI_START_X = 21
+      KOMADAI_GOTE_START_Y = 1
+      KOMADAI_SENTE_START_Y = 7
+
       module EscapeSequence
         RESET = "\e[0m"
         RESET_CURSOR = "\e[1;1H"
@@ -16,11 +20,18 @@ module ConsoleShogi
         TEXT_COLOR_GOTE = "\e[30m"
       end
 
+      module Location
+        NONE = :none
+        BOARD = :board
+        SENTE_KOMADAI = :sente_komadai
+        GOTE_KOMADAI = :gote_komadai
+      end
+
       def cursor_position
         @cursor_position ||= CursorPosition.new(x: 1, y: 1)
       end
 
-      def print_board(board:, sente_player:, gote_player:)
+      def print_board(board:, sente_komadai:, gote_komadai:)
         # NOTE 画面をクリア
         print "\e[2J"
 
@@ -44,8 +55,8 @@ module ConsoleShogi
         end
 
         # NOTE 駒台を表示
-        print_piece_stand(sente_player)
-        print_piece_stand(gote_player)
+        print_komadai(sente_komadai, KOMADAI_SENTE_START_Y, EscapeSequence::TEXT_COLOR_SENTE)
+        print_komadai(gote_komadai, KOMADAI_GOTE_START_Y, EscapeSequence::TEXT_COLOR_GOTE)
 
         # NOTE back a cursor
         print "\e[#{cursor_position.y};#{cursor_position.x}H"
@@ -67,23 +78,26 @@ module ConsoleShogi
         reload_cursor_position_in_stdin!
       end
 
+      # TODO 駒台の大きさが変わるのをどうするか考える、メソッド名考える
       def squares_index
-        {x: (cursor_position.x - 1) / HORIZONTAL_DISTANCE, y: cursor_position.y - 1}
+        case cursor_position
+        in x: 1..18, y: 1..9
+          {x: (cursor_position.x - 1) / HORIZONTAL_DISTANCE, y: cursor_position.y - 1, location: Location::BOARD}
+        in x: 21..38, y: 1..3
+          {x: (cursor_position.x - 21) / HORIZONTAL_DISTANCE, y: cursor_position.y - 1, location: Location::GOTE_KOMADAI}
+        in x: 21..38, y: 7..9
+          {x: (cursor_position.x - 21) / HORIZONTAL_DISTANCE, y: cursor_position.y - 7, location: Location::SENTE_KOMADAI}
+        else
+          {x: (cursor_position.x - 1) / HORIZONTAL_DISTANCE, y: cursor_position.y - 1, location: Location::NONE}
+        end
       end
 
       private
 
-      PIECE_STAND_START_X = 21
-      PIECE_STAND_GOTE_START_Y = 1
-      PIECE_STAND_SENTE_START_Y = 7
-
       # TODO view 用の Player 作って整理する
-      def print_piece_stand(player)
-        start_y = player.sente? ? PIECE_STAND_SENTE_START_Y : PIECE_STAND_GOTE_START_Y
-        text_color = player.sente? ? EscapeSequence::TEXT_COLOR_SENTE : EscapeSequence::TEXT_COLOR_GOTE
-
-        player.komadai.pieces.row_vectors.each_with_index do |row_pieces, i|
-          print "\e[#{start_y + i};#{PIECE_STAND_START_X}H"
+      def print_komadai(komadai, start_y, text_color)
+        komadai.pieces.row_vectors.each_with_index do |row_pieces, i|
+          print "\e[#{start_y + i};#{KOMADAI_START_X}H"
           print EscapeSequence::BACKGROUND_COLOR_YELLOW
           print text_color
 

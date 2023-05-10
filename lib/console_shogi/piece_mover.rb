@@ -7,7 +7,7 @@ module ConsoleShogi
       @from_piece_index = from
     end
 
-    def move
+    def move!
       return if target_piece.nil? || target_piece.none?
 
       while key = STDIN.getch
