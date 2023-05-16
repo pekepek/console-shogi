@@ -44,6 +44,8 @@ module ConsoleShogi
 
       return false unless to_piece.none?
 
+      return false if nifu?(piece, to_piece_index)
+
       can_move_next_turn?(piece, to_piece_index)
     end
 
@@ -53,6 +55,11 @@ module ConsoleShogi
       piece.moves.any? {|m|
         piece_mover.can_move?(piece: piece, to_piece_index: {x: to_piece_index[:x] + m[:x], y: to_piece_index[:y] + m[:y]})
       }
+    end
+
+    def nifu?(piece, to_piece_index)
+      piece.fu? &&
+        board.matrix.column(to_piece_index[:x]).any? {|p| p.fu? }
     end
   end
 end

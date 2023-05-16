@@ -40,6 +40,10 @@ module ConsoleShogi
       self::class == Kyosha
     end
 
+    def fu?
+      self::class == Fu
+    end
+
     def moves
       ms = base_moves
 
@@ -68,7 +72,7 @@ module ConsoleShogi
     end
   end
 
-  class Hu < Piece
+  class Fu < Piece
     NUMBER = 1
     DISPLAY_NAME = '歩'
 

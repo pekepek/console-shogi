@@ -29,15 +29,15 @@ module ConsoleShogi
               NonePiece.new
             ],
             [
-              Hu.new(player: gote_player),
-              Hu.new(player: gote_player),
-              Hu.new(player: gote_player),
-              Hu.new(player: gote_player),
-              Hu.new(player: gote_player),
-              Hu.new(player: gote_player),
-              Hu.new(player: gote_player),
-              Hu.new(player: gote_player),
-              Hu.new(player: gote_player)
+              Fu.new(player: gote_player),
+              Fu.new(player: gote_player),
+              Fu.new(player: gote_player),
+              Fu.new(player: gote_player),
+              Fu.new(player: gote_player),
+              Fu.new(player: gote_player),
+              Fu.new(player: gote_player),
+              Fu.new(player: gote_player),
+              Fu.new(player: gote_player)
             ],
             [
               NonePiece.new,
@@ -73,15 +73,15 @@ module ConsoleShogi
               NonePiece.new
             ],
             [
-              Hu.new(player: sente_player),
-              Hu.new(player: sente_player),
-              Hu.new(player: sente_player),
-              Hu.new(player: sente_player),
-              Hu.new(player: sente_player),
-              Hu.new(player: sente_player),
-              Hu.new(player: sente_player),
-              Hu.new(player: sente_player),
-              Hu.new(player: sente_player)
+              Fu.new(player: sente_player),
+              Fu.new(player: sente_player),
+              Fu.new(player: sente_player),
+              Fu.new(player: sente_player),
+              Fu.new(player: sente_player),
+              Fu.new(player: sente_player),
+              Fu.new(player: sente_player),
+              Fu.new(player: sente_player),
+              Fu.new(player: sente_player)
             ],
             [
               NonePiece.new,
