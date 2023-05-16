@@ -9,7 +9,7 @@ module ConsoleShogi
       @from_piece_index = from
     end
 
-    def move!
+    def drop!
       return if target_piece.nil? || target_piece.none?
 
       while key = STDIN.getch
@@ -21,7 +21,7 @@ module ConsoleShogi
           to_piece_index = TerminalOperator.squares_index
 
           return if to_piece_index[:location] != :board
-          return unless can_move?(piece: target_piece, from: from_piece_index, to: to_piece_index)
+          return unless can_drop?(piece: target_piece, to_piece_index: to_piece_index)
 
           komadai.pick_up_piece!(from: from_piece_index)
           board.put_piece!(piece: target_piece, to: to_piece_index)
@@ -39,13 +39,20 @@ module ConsoleShogi
       @target_piece ||= komadai.fetch_piece(x: from_piece_index[:x], y: from_piece_index[:y])
     end
 
-    def can_move?(piece:, from:, to:)
-      to_piece = board.fetch_piece(x: to[:x], y: to[:y])
+    def can_drop?(piece:, to_piece_index:)
+      to_piece = board.fetch_piece(x: to_piece_index[:x], y: to_piece_index[:y])
 
       return false unless to_piece.none?
 
-      # ピースが動かせる場所があるか
-      true
+      can_move_next_turn?(piece, to_piece_index)
+    end
+
+    def can_move_next_turn?(piece, to_piece_index)
+      piece_mover = PieceMover.new(board: board, from: to_piece_index)
+
+      piece.moves.any? {|m|
+        piece_mover.can_move?(piece: piece, to_piece_index: {x: to_piece_index[:x] + m[:x], y: to_piece_index[:y] + m[:y]})
+      }
     end
   end
 end

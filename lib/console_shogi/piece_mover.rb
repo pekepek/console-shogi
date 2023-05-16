@@ -18,7 +18,7 @@ module ConsoleShogi
         elsif key == "\r"
           to_piece_index = TerminalOperator.squares_index
 
-          return unless can_move?(piece: target_piece, from: from_piece_index, to: to_piece_index)
+          return unless can_move?(piece: target_piece, to_piece_index: to_piece_index)
 
           board.move_piece!(
             from: {x: from_piece_index[:x], y: from_piece_index[:y]},
@@ -30,20 +30,14 @@ module ConsoleShogi
       end
     end
 
-    private
+    def can_move?(piece:, to_piece_index:)
+      return false unless board.within_range?(x: to_piece_index[:x], y: to_piece_index[:y])
 
-    attr_reader :board, :from_piece_index
-
-    def target_piece
-      @target_piece ||= board.fetch_piece(x: from_piece_index[:x], y: from_piece_index[:y])
-    end
-
-    def can_move?(piece:, from:, to:)
-      diff = {x: to[:x] - from[:x], y: to[:y] - from[:y]}
+      diff = {x: to_piece_index[:x] - from_piece_index[:x], y: to_piece_index[:y] - from_piece_index[:y]}
 
       return false if piece.moves.none? {|m| m[:x] == diff[:x] && m[:y] == diff[:y] }
 
-      to_piece = board.fetch_piece(x: to[:x], y: to[:y])
+      to_piece = board.fetch_piece(x: to_piece_index[:x], y: to_piece_index[:y])
 
       return false if piece.player.teban == to_piece.player.teban
 
@@ -53,12 +47,20 @@ module ConsoleShogi
       element = [diff[:x] / distance, diff[:y] / distance]
 
       1.upto(distance - 1) do |d|
-        piece = board.fetch_piece(x: from[:x] + element[0] * d, y: from[:y] + element[1] * d)
+        piece = board.fetch_piece(x: from_piece_index[:x] + element[0] * d, y: from_piece_index[:y] + element[1] * d)
 
         return false unless piece.none?
       end
 
       true
+    end
+
+    private
+
+    attr_reader :board, :from_piece_index
+
+    def target_piece
+      @target_piece ||= board.fetch_piece(x: from_piece_index[:x], y: from_piece_index[:y])
     end
   end
 end

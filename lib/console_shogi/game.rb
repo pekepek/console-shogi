@@ -31,9 +31,9 @@ module ConsoleShogi
           when :board
             PieceMover.new(board: board, from: index).move!
           when :sente_komadai
-            PieceMoverOnKomadai.new(board: board, komadai: sente_player.komadai, from: index).move!
+            PieceMoverOnKomadai.new(board: board, komadai: sente_player.komadai, from: index).drop!
           when :gote_komadai
-            PieceMoverOnKomadai.new(board: board, komadai: gote_player.komadai, from: index).move!
+            PieceMoverOnKomadai.new(board: board, komadai: gote_player.komadai, from: index).drop!
           end
         end
 

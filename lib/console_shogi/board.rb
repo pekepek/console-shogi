@@ -12,6 +12,15 @@ module ConsoleShogi
       @pieces
     end
 
+    def within_range?(x:, y:)
+      case {x: x, y: y}
+      in x: 0..8, y: 0..8
+        true
+      else
+        false
+      end
+    end
+
     def fetch_piece(x:, y:)
       pieces[y, x]
     end
