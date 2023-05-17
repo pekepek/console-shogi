@@ -26,6 +26,8 @@ module ConsoleShogi
     def capture_piece!(piece)
       @komadai.expand! unless komadai.have_space?
 
+      piece = piece.original if piece.promoted?
+
       piece.change_player!(self)
       komadai.put(piece: piece)
     end

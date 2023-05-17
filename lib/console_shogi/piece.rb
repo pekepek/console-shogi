@@ -18,6 +18,10 @@ module ConsoleShogi
       promoted
     end
 
+    def promoted?
+      false
+    end
+
     def number
       self::class::NUMBER
     end
@@ -263,6 +267,10 @@ module ConsoleShogi
 
     def can_promote?
       false
+    end
+
+    def promoted?
+      true
     end
 
     class NariKin < PromotedPiece
