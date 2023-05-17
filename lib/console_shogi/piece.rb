@@ -13,7 +13,9 @@ module ConsoleShogi
     end
 
     def promote
-      raise NotImplementedError
+      return self unless can_promote?
+
+      promoted
     end
 
     def number
@@ -70,6 +72,10 @@ module ConsoleShogi
     def player
       NonPlayer.new
     end
+
+    def can_promote?
+      false
+    end
   end
 
   class Fu < Piece
@@ -80,6 +86,14 @@ module ConsoleShogi
       [
         {x: 0, y: -1}
       ]
+    end
+
+    def can_promote?
+      true
+    end
+
+    def promoted
+      PromotedPiece::NariKin.new(original: self)
     end
   end
 
@@ -92,6 +106,14 @@ module ConsoleShogi
         {x: 0, y: -1 * n}
       }
     end
+
+    def can_promote?
+      true
+    end
+
+    def promoted
+      PromotedPiece::NariKin.new(original: self)
+    end
   end
 
   class Keima < Piece
@@ -103,6 +125,14 @@ module ConsoleShogi
         {x: 1, y: -2},
         {x: -1, y: -2},
       ]
+    end
+
+    def can_promote?
+      true
+    end
+
+    def promoted
+      PromotedPiece::NariKin.new(original: self)
     end
   end
 
@@ -118,6 +148,14 @@ module ConsoleShogi
         {x: 1, y: 1},
         {x: -1, y: 1}
       ]
+    end
+
+    def can_promote?
+      true
+    end
+
+    def promoted
+      PromotedPiece::NariKin.new(original: self)
     end
   end
 
@@ -135,6 +173,14 @@ module ConsoleShogi
         {x: 0, y: 1}
       ]
     end
+
+    def can_promote?
+      true
+    end
+
+    def promoted
+      PromotedPiece::NariKin.new(original: self)
+    end
   end
 
   class Kaku < Piece
@@ -151,6 +197,14 @@ module ConsoleShogi
         ]
       }
     end
+
+     def can_promote?
+      true
+    end
+
+    def promoted
+      PromotedPiece::Uma.new(original: self)
+    end
   end
 
   class Hisha < Piece
@@ -166,6 +220,14 @@ module ConsoleShogi
           {x: 1 * n, y: 0}
         ]
       }
+    end
+
+    def can_promote?
+      true
+    end
+
+    def promoted
+      PromotedPiece::Ryu.new(original: self)
     end
   end
 
@@ -184,6 +246,81 @@ module ConsoleShogi
         {x: 0, y: 1},
         {x: 1, y: 1}
       ]
+    end
+
+    def can_promote?
+      true
+    end
+  end
+
+  class PromotedPiece < Piece
+    attr_reader :player, :original
+
+    def initialize(original: nil)
+      @player = original.player
+      @original = original
+    end
+
+    def can_promote?
+      false
+    end
+
+    class NariKin < PromotedPiece
+      NUMBER = 9
+      DISPLAY_NAME = '金'
+
+      def base_moves
+        [
+          {x: -1, y: -1},
+          {x: 0, y: -1},
+          {x: 1, y: -1},
+          {x: 1, y: 0},
+          {x: -1, y: 0},
+          {x: 0, y: 1}
+        ]
+      end
+    end
+
+    class Uma < PromotedPiece
+      NUMBER = 10
+      DISPLAY_NAME = '馬'
+
+      def base_moves
+        (1..8).flat_map {|n|
+          [
+            {x: -1 * n, y: -1 * n},
+            {x: 1 * n, y: -1 * n},
+            {x: -1 * n, y: 1 * n},
+            {x: 1 * n, y: 1 * n}
+          ]
+        } + [
+          {x: 0, y: -1},
+          {x: 1, y: 0},
+          {x: -1, y: 0},
+          {x: 0, y: 1}
+        ]
+      end
+    end
+
+    class Ryu < PromotedPiece
+      NUMBER = 11
+      DISPLAY_NAME = '龍'
+
+      def base_moves
+        (1..8).flat_map {|n|
+          [
+            {x: 0, y: -1 * n},
+            {x: 0, y: 1 * n},
+            {x: -1 * n, y: 0},
+            {x: 1 * n, y: 0}
+          ]
+        } + [
+          {x: -1, y: -1},
+          {x: 1, y: -1},
+          {x: -1, y: 1},
+          {x: 1, y: 1}
+        ]
+      end
     end
   end
 end
