@@ -37,6 +37,9 @@ module ConsoleShogi
           end
         end
 
+        # TODO 王様を取ったらゲーム終了
+        # 勝ったほうユーザー名を表示する
+
         TerminalOperator.print_board(board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
       end
     end
