@@ -26,8 +26,12 @@ module ConsoleShogi
       self::class::NUMBER
     end
 
-    def display_name
-      self::class::DISPLAY_NAME
+    def image
+      if player.sente?
+        File.read("images/sente/#{self::class.name.split('::').last.downcase}.png")
+      else
+        File.read("images/gote/#{self::class.name.split('::').last.downcase}.png")
+      end
     end
 
     def none?
@@ -67,7 +71,6 @@ module ConsoleShogi
 
   class NonePiece < Piece
     NUMBER = 0
-    DISPLAY_NAME = '　'
 
     def moves
       []
@@ -84,7 +87,6 @@ module ConsoleShogi
 
   class Fu < Piece
     NUMBER = 1
-    DISPLAY_NAME = '歩'
 
     def base_moves
       [
@@ -103,7 +105,6 @@ module ConsoleShogi
 
   class Kyosha < Piece
     NUMBER = 2
-    DISPLAY_NAME = '香'
 
     def base_moves
       (1..8).map {|n|
@@ -122,7 +123,6 @@ module ConsoleShogi
 
   class Keima < Piece
     NUMBER = 3
-    DISPLAY_NAME = '桂'
 
     def base_moves
       [
@@ -142,7 +142,6 @@ module ConsoleShogi
 
   class Gin < Piece
     NUMBER = 4
-    DISPLAY_NAME = '銀'
 
     def base_moves
       [
@@ -165,7 +164,6 @@ module ConsoleShogi
 
   class Kin < Piece
     NUMBER = 5
-    DISPLAY_NAME = '金'
 
     def base_moves
       [
@@ -189,7 +187,6 @@ module ConsoleShogi
 
   class Kaku < Piece
     NUMBER = 6
-    DISPLAY_NAME = '角'
 
     def base_moves
       (1..8).flat_map {|n|
@@ -213,7 +210,6 @@ module ConsoleShogi
 
   class Hisha < Piece
     NUMBER = 7
-    DISPLAY_NAME = '飛'
 
     def base_moves
       (1..8).flat_map {|n|
@@ -237,7 +233,6 @@ module ConsoleShogi
 
   class Ohsho < Piece
     NUMBER = 8
-    DISPLAY_NAME = '王'
 
     def base_moves
       [
@@ -275,7 +270,6 @@ module ConsoleShogi
 
     class NariKin < PromotedPiece
       NUMBER = 9
-      DISPLAY_NAME = '金'
 
       def base_moves
         [
@@ -291,7 +285,6 @@ module ConsoleShogi
 
     class Uma < PromotedPiece
       NUMBER = 10
-      DISPLAY_NAME = '馬'
 
       def base_moves
         (1..8).flat_map {|n|
@@ -312,7 +305,6 @@ module ConsoleShogi
 
     class Ryu < PromotedPiece
       NUMBER = 11
-      DISPLAY_NAME = '龍'
 
       def base_moves
         (1..8).flat_map {|n|

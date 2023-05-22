@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'base64'
+
 module ConsoleShogi
   class TerminalOperator
     class << self
@@ -38,17 +40,11 @@ module ConsoleShogi
         # NOTE カーソルを1行1列に移動
         print EscapeSequence::RESET_CURSOR
 
+        image_height = calculate_fit_image_height
+
         board.matrix.row_vectors.each_with_index do |vector, i|
           vector.each_with_index do |piece, j|
-            print (i + j) % 2 == 0 ? EscapeSequence::BACKGROUND_COLOR_GREEN : EscapeSequence::BACKGROUND_COLOR_YELLOW
-
-            if piece.player.gote?
-              print EscapeSequence::TEXT_COLOR_GOTE
-            elsif piece.player.sente?
-              print EscapeSequence::TEXT_COLOR_SENTE
-            end
-
-            print piece.display_name
+            print_image(image: piece.image, height: image_height)
           end
 
           print "#{EscapeSequence::RESET}\n"
@@ -59,7 +55,13 @@ module ConsoleShogi
         print_komadai(gote_komadai, KOMADAI_GOTE_START_Y, EscapeSequence::TEXT_COLOR_GOTE)
 
         # NOTE back a cursor
-        print "\e[#{cursor_position.y};#{cursor_position.x}H"
+        back_to_cursor
+      end
+
+      def active_piece(board:, piece_index:)
+        back_to_cursor
+
+        board.fetch_piece(x: piece_index[:x], y: piece_index[:y])
       end
 
       def move_cursor(key)
@@ -94,6 +96,24 @@ module ConsoleShogi
 
       private
 
+      IMAGE_HEIGHT_PIXEL = 240
+
+      # TODO 無理やりなので、実現方法を再考する
+      def calculate_fit_image_height
+        start_position = fetch_cursor_position_in_stdin
+        # NOTE NonePiece を選んでいることに意味はない
+        print_image(image: NonePiece.new.image)
+        end_position = fetch_cursor_position_in_stdin
+
+        fixed_height = IMAGE_HEIGHT_PIXEL / (end_position[1].to_i - start_position[1].to_i)
+
+        print "\e[2J"
+        # NOTE カーソルを1行1列に移動
+        print EscapeSequence::RESET_CURSOR
+
+        fixed_height
+      end
+
       # TODO view 用の Player 作って整理する
       def print_komadai(komadai, start_y, text_color)
         komadai.pieces.row_vectors.each_with_index do |row_pieces, i|
@@ -101,15 +121,16 @@ module ConsoleShogi
           print EscapeSequence::BACKGROUND_COLOR_YELLOW
           print text_color
 
+          # TODO 駒台も表示可能にする
           row_pieces.each do |p|
-            print p.display_name
+            print '　'
           end
 
           print EscapeSequence::RESET
         end
       end
 
-      def reload_cursor_position_in_stdin!
+      def fetch_cursor_position_in_stdin
         stdout = ''
 
         $stdin.raw do |stdin|
@@ -121,9 +142,48 @@ module ConsoleShogi
           end
         end
 
-        positions = stdout.match /(\d+);(\d+)/
+        stdout.match /(\d+);(\d+)/
+      end
+
+      def reload_cursor_position_in_stdin!
+        positions = fetch_cursor_position_in_stdin
 
         @cursor_position = CursorPosition.new(x: positions[2].to_i, y: positions[1].to_i)
+      end
+
+      def back_to_cursor
+        print "\e[#{cursor_position.y};#{cursor_position.x}H"
+      end
+
+      # TODO 画像を表示するためのメソッド、場所検討
+      def print_image(image:, width: nil, height: nil)
+        encoded_image = Base64.strict_encode64(image)
+
+        print_osc
+        print "1337;File=inline=1"
+        print ";size=#{image.size}"
+        print ";name=#{encoded_image}"
+        print ";width=#{width}px" unless width.nil?
+        print ";height=#{height}px" unless height.nil?
+        print ":#{encoded_image}"
+        print_st
+      end
+
+      def print_osc
+        # NOTE \e] で始まるシーケンスは全てのターミナルで扱えるわけでは無い
+        if ENV['TERM'].start_with?('screen') || ENV['TERM'].start_with?('tmux')
+          print "\ePtmux;\e\e]"
+        else
+          print "\e]"
+        end
+      end
+
+      def print_st
+        if ENV['TERM'].start_with?('screen') || ENV['TERM'].start_with?('tmux')
+          print "\a\e\\"
+        else
+          print "\a"
+        end
       end
     end
   end

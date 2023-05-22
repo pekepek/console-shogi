@@ -35,12 +35,12 @@ module ConsoleShogi
           when :gote_komadai
             PieceMoverOnKomadai.new(board: board, komadai: gote_player.komadai, from: index).drop!
           end
+
+          TerminalOperator.print_board(board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
         end
 
         # TODO 王様を取ったらゲーム終了
         # 勝ったほうユーザー名を表示する
-
-        TerminalOperator.print_board(board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
       end
     end
 
