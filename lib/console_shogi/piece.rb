@@ -99,7 +99,7 @@ module ConsoleShogi
     end
 
     def promoted
-      PromotedPiece::NariKin.new(original: self)
+      PromotedPiece::Tokin.new(original: self)
     end
   end
 
@@ -117,7 +117,7 @@ module ConsoleShogi
     end
 
     def promoted
-      PromotedPiece::NariKin.new(original: self)
+      PromotedPiece::Narikyo.new(original: self)
     end
   end
 
@@ -136,7 +136,7 @@ module ConsoleShogi
     end
 
     def promoted
-      PromotedPiece::NariKin.new(original: self)
+      PromotedPiece::Narikei.new(original: self)
     end
   end
 
@@ -158,7 +158,7 @@ module ConsoleShogi
     end
 
     def promoted
-      PromotedPiece::NariKin.new(original: self)
+      PromotedPiece::Narigin.new(original: self)
     end
   end
 
@@ -177,11 +177,7 @@ module ConsoleShogi
     end
 
     def can_promote?
-      true
-    end
-
-    def promoted
-      PromotedPiece::NariKin.new(original: self)
+      false
     end
   end
 
@@ -282,6 +278,11 @@ module ConsoleShogi
         ]
       end
     end
+
+    class Narigin < NariKin; end
+    class Narikei < NariKin; end
+    class Narikyo < NariKin; end
+    class Tokin < NariKin; end
 
     class Uma < PromotedPiece
       NUMBER = 10
