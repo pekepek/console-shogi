@@ -36,6 +36,7 @@ module ConsoleShogi
             PieceMoverOnKomadai.new(board: board, komadai: gote_player.komadai, from: index).drop!
           end
 
+          # TODO 描写に時間がかかるので、差分のみ表示できる様にする
           TerminalOperator.print_board(board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
         end
 

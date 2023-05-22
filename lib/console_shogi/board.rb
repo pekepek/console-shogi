@@ -40,6 +40,7 @@ module ConsoleShogi
       from_piece.player.capture_piece!(to_piece) unless to_piece.none?
 
       # NOTE だいぶ複雑になってきている、整理して外に出したい
+      # TODO 成るかどうかは選べる必要がある
       @pieces[to[:y], to[:x]] =
         if can_promote?(from_piece, to)
           from_piece.promote
