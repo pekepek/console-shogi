@@ -33,14 +33,16 @@ module ConsoleShogi
         @cursor_position ||= CursorPosition.new(x: 1, y: 1)
       end
 
+      def image_height
+        @image_height ||= calculate_fit_image_height
+      end
+
       def print_board(board:, sente_komadai:, gote_komadai:)
         # NOTE 画面をクリア
         print "\e[2J"
 
         # NOTE カーソルを1行1列に移動
         print EscapeSequence::RESET_CURSOR
-
-        image_height = calculate_fit_image_height
 
         board.matrix.row_vectors.each_with_index do |vector, i|
           vector.each_with_index do |piece, j|
@@ -121,9 +123,8 @@ module ConsoleShogi
           print EscapeSequence::BACKGROUND_COLOR_YELLOW
           print text_color
 
-          # TODO 駒台も表示可能にする
           row_pieces.each do |p|
-            print '　'
+            print_image(image: p.image, height: image_height)
           end
 
           print EscapeSequence::RESET
