@@ -19,13 +19,13 @@ module ConsoleShogi
             ],
             [
               NonePiece.new,
-              Kaku.new(player: gote_player),
-              NonePiece.new,
-              NonePiece.new,
-              NonePiece.new,
-              NonePiece.new,
-              NonePiece.new,
               Hisha.new(player: gote_player),
+              NonePiece.new,
+              NonePiece.new,
+              NonePiece.new,
+              NonePiece.new,
+              NonePiece.new,
+              Kaku.new(player: gote_player),
               NonePiece.new
             ],
             [

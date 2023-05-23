@@ -59,7 +59,7 @@ module ConsoleShogi
 
     def nifu?(piece, to_piece_index)
       piece.fu? &&
-        board.matrix.column(to_piece_index[:x]).any? {|p| p.fu? }
+        board.matrix.column(to_piece_index[:x]).any? {|p| p.fu? && piece.player == p.player }
     end
   end
 end
