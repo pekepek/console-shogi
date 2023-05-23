@@ -25,6 +25,10 @@ module ConsoleShogi
       pieces[y, x]
     end
 
+    def promote_piece!(x:, y:)
+      @pieces[y, x] = pieces[y, x].promote
+    end
+
     def put_piece!(piece:, to:)
       @pieces[to[:y], to[:x]] = piece
     end
@@ -39,23 +43,11 @@ module ConsoleShogi
       #      from_piece.player で player 取るの違和感
       from_piece.player.capture_piece!(to_piece) unless to_piece.none?
 
-      # NOTE だいぶ複雑になってきている、整理して外に出したい
-      # TODO 成るかどうかは選べる必要がある
-      @pieces[to[:y], to[:x]] =
-        if can_promote?(from_piece, to)
-          from_piece.promote
-        else
-          from_piece
-        end
+      @pieces[to[:y], to[:x]] = from_piece
     end
 
     private
 
     attr_reader :pieces
-
-    def can_promote?(piece, to)
-      (piece.player.sente? && to[:y].between?(0, 2)) ||
-        (piece.player.gote? && to[:y].between?(6, 8))
-    end
   end
 end

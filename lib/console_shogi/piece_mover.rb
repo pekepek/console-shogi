@@ -25,6 +25,12 @@ module ConsoleShogi
             to: {x: to_piece_index[:x], y: to_piece_index[:y]}
           )
 
+          # TODO とりあえずここに実装してしまっている。整理したい
+          piece = board.fetch_piece(x: to_piece_index[:x], y: to_piece_index[:y])
+          return unless can_promote?(piece, to_piece_index)
+
+          board.promote_piece!(x: to_piece_index[:x], y: to_piece_index[:y]) if TerminalOperator.select_promotion
+
           return
         end
       end
@@ -61,6 +67,12 @@ module ConsoleShogi
 
     def target_piece
       @target_piece ||= board.fetch_piece(x: from_piece_index[:x], y: from_piece_index[:y])
+    end
+
+    def can_promote?(piece, to)
+      piece.can_promote? &&
+      (piece.player.sente? && to[:y].between?(0, 2)) ||
+        (piece.player.gote? && to[:y].between?(6, 8))
     end
   end
 end

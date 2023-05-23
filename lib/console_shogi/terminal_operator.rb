@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'base64'
+require 'tty-prompt'
 
 module ConsoleShogi
   class TerminalOperator
@@ -94,6 +95,17 @@ module ConsoleShogi
         else
           {x: (cursor_position.x - 1) / HORIZONTAL_DISTANCE, y: cursor_position.y - 1, location: Location::NONE}
         end
+      end
+
+      def select_promotion
+        print "\e[10;1H"
+
+        prompt = TTY::Prompt.new
+
+        prompt.select('成りますか？', show_help: :never) {|menu|
+          menu.choice '成る', true
+          menu.choice '成らない', false
+        }
       end
 
       private
