@@ -23,6 +23,10 @@ module ConsoleShogi
       teban == Teban::GOTE
     end
 
+    def win?
+      komadai.pieces.any? {|p| p.class == Ohsho }
+    end
+
     def capture_piece!(piece)
       @komadai.expand! unless komadai.have_space?
 

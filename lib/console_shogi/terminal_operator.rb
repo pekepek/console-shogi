@@ -108,6 +108,14 @@ module ConsoleShogi
         }
       end
 
+      def print_winner(teban)
+        print "\e[4;7H"
+
+        print_image(image: File.read("images/#{teban}/shori.png"), height: image_height * 3)
+
+        print "\e[10;1H"
+      end
+
       private
 
       IMAGE_HEIGHT_PIXEL = 240

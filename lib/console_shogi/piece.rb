@@ -244,7 +244,7 @@ module ConsoleShogi
     end
 
     def can_promote?
-      true
+      false
     end
   end
 

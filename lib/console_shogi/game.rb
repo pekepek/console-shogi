@@ -38,6 +38,14 @@ module ConsoleShogi
 
           # TODO 描写に時間がかかるので、差分のみ表示できる様にする
           TerminalOperator.print_board(board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
+
+          # TODO ひとまず動く物を作った。リファクタリングする
+          [sente_player, gote_player].each do |player|
+            next unless player.win?
+
+            TerminalOperator.print_winner(player.teban)
+            exit
+          end
         end
 
         # TODO 王様を取ったらゲーム終了
