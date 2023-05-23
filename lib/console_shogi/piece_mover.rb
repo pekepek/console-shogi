@@ -69,6 +69,7 @@ module ConsoleShogi
       @target_piece ||= board.fetch_piece(x: from_piece_index[:x], y: from_piece_index[:y])
     end
 
+    # TODO 相手陣地から出たときも成れる
     def can_promote?(piece, to)
       piece.can_promote? &&
       (piece.player.sente? && to[:y].between?(0, 2)) ||
