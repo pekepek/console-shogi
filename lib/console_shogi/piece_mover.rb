@@ -27,7 +27,7 @@ module ConsoleShogi
 
           # TODO とりあえずここに実装してしまっている。整理したい
           piece = board.fetch_piece(x: to_piece_index[:x], y: to_piece_index[:y])
-          return unless can_promote?(piece, to_piece_index)
+          return unless can_promote?(piece, from_piece_index, to_piece_index)
 
           board.promote_piece!(x: to_piece_index[:x], y: to_piece_index[:y]) if TerminalOperator.select_promotion
 
@@ -70,10 +70,10 @@ module ConsoleShogi
     end
 
     # TODO 相手陣地から出たときも成れる
-    def can_promote?(piece, to)
+    def can_promote?(piece, from, to)
       piece.can_promote? &&
-      (piece.player.sente? && to[:y].between?(0, 2)) ||
-        (piece.player.gote? && to[:y].between?(6, 8))
+      (piece.player.sente? && (from[:y].between?(0, 2) || to[:y].between?(0, 2))) ||
+        (piece.player.gote? && (from[:y].between?(6, 8) || to[:y].between?(6, 8)))
     end
   end
 end
