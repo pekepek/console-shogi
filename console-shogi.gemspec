@@ -6,7 +6,7 @@ Gem::Specification.new do |spec|
   spec.name = "console-shogi"
   spec.version = ConsoleShogi::VERSION
   spec.authors = ["pekepek"]
-  spec.email = ["ishihata@33i.co.jp"]
+  spec.email = ["ishihata@sansan.com"]
 
   spec.summary = %q{You can play the Shogi in terminal}
   spec.description = %q{You can play the Shogi in terminal}
