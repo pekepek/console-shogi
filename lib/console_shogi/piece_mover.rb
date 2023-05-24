@@ -69,11 +69,14 @@ module ConsoleShogi
       @target_piece ||= board.fetch_piece(x: from_piece_index[:x], y: from_piece_index[:y])
     end
 
-    # TODO 相手陣地から出たときも成れる
     def can_promote?(piece, from, to)
-      piece.can_promote? &&
-      (piece.player.sente? && (from[:y].between?(0, 2) || to[:y].between?(0, 2))) ||
-        (piece.player.gote? && (from[:y].between?(6, 8) || to[:y].between?(6, 8)))
+      return false unless piece.can_promote?
+
+      if piece.player.sente?
+        from[:y].between?(0, 2) || to[:y].between?(0, 2)
+      elsif piece.player.gote?
+        from[:y].between?(6, 8) || to[:y].between?(6, 8)
+      end
     end
   end
 end
