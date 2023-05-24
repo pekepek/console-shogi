@@ -47,9 +47,6 @@ module ConsoleShogi
             exit
           end
         end
-
-        # TODO 王様を取ったらゲーム終了
-        # 勝ったほうユーザー名を表示する
       end
     end
 
