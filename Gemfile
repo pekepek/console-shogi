@@ -5,6 +5,8 @@ source "https://rubygems.org"
 # Specify your gem's dependencies in console-shogi.gemspec
 gemspec
 
+ruby "~> 3.2.0"
+
 gem "rake", "~> 13.0"
 gem "matrix", "~> 0.4.2"
 gem "pry", "~> 0.14.2"
