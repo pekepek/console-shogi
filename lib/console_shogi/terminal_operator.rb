@@ -17,10 +17,6 @@ module ConsoleShogi
       module EscapeSequence
         RESET = "\e[0m"
         RESET_CURSOR = "\e[1;1H"
-        BACKGROUND_COLOR_YELLOW = "\e[43m"
-        BACKGROUND_COLOR_GREEN = "\e[42m"
-        TEXT_COLOR_SENTE = "\e[37m"
-        TEXT_COLOR_GOTE = "\e[30m"
       end
 
       module Location
@@ -54,8 +50,8 @@ module ConsoleShogi
         end
 
         # NOTE 駒台を表示
-        print_komadai(sente_komadai, KOMADAI_SENTE_START_Y, EscapeSequence::TEXT_COLOR_SENTE)
-        print_komadai(gote_komadai, KOMADAI_GOTE_START_Y, EscapeSequence::TEXT_COLOR_GOTE)
+        print_komadai(sente_komadai, KOMADAI_SENTE_START_Y)
+        print_komadai(gote_komadai, KOMADAI_GOTE_START_Y)
 
         # NOTE back a cursor
         back_to_cursor
@@ -137,18 +133,16 @@ module ConsoleShogi
       end
 
       # TODO view 用の Player 作って整理する
-      def print_komadai(komadai, start_y, text_color)
+      def print_komadai(komadai, start_y)
         komadai.pieces.row_vectors.each_with_index do |row_pieces, i|
           print "\e[#{start_y + i};#{KOMADAI_START_X}H"
-          print EscapeSequence::BACKGROUND_COLOR_YELLOW
-          print text_color
 
           row_pieces.each do |p|
             print_image(image: p.image, height: image_height)
           end
-
-          print EscapeSequence::RESET
         end
+
+        print EscapeSequence::RESET
       end
 
       def fetch_cursor_position_in_stdin
