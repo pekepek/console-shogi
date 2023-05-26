@@ -17,6 +17,9 @@ module ConsoleShogi
       module EscapeSequence
         RESET = "\e[0m"
         RESET_CURSOR = "\e[1;1H"
+        SCREEN_CLEAR = "\e[2J"
+        OUTSIDE_BOARD = "\e[10;1H"
+        CURRENT_POSITION = "\e[6n"
       end
 
       module Location
@@ -36,7 +39,7 @@ module ConsoleShogi
 
       def print_board(board:, sente_komadai:, gote_komadai:)
         # NOTE 画面をクリア
-        print "\e[2J"
+        print EscapeSequence::SCREEN_CLEAR
 
         # NOTE カーソルを1行1列に移動
         print EscapeSequence::RESET_CURSOR
@@ -94,7 +97,7 @@ module ConsoleShogi
       end
 
       def select_promotion
-        print "\e[10;1H"
+        print EscapeSequence::OUTSIDE_BOARD
 
         prompt = TTY::Prompt.new
 
@@ -104,12 +107,12 @@ module ConsoleShogi
         }
       end
 
-      def print_winner(teban)
+      def print_winner(player)
         print "\e[4;7H"
 
-        print_image(image: File.read("images/#{teban}/shori.png"), height: image_height * 3)
+        print_image(image: player.win_image, height: image_height * 3)
 
-        print "\e[10;1H"
+        print EscapeSequence::OUTSIDE_BOARD
       end
 
       private
@@ -125,7 +128,7 @@ module ConsoleShogi
 
         fixed_height = IMAGE_HEIGHT_PIXEL / (end_position[1].to_i - start_position[1].to_i)
 
-        print "\e[2J"
+        print EscapeSequence::SCREEN_CLEAR
         # NOTE カーソルを1行1列に移動
         print EscapeSequence::RESET_CURSOR
 
@@ -149,9 +152,10 @@ module ConsoleShogi
         stdout = ''
 
         $stdin.raw do |stdin|
-          $stdout << "\e[6n"
+          $stdout << EscapeSequence::CURRENT_POSITION
           $stdout.flush
 
+          # NOTE \e[n;mR という形式で現在位置が返ってくる
           while (c = stdin.getc) != 'R'
             stdout += c
           end

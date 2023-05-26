@@ -43,7 +43,7 @@ module ConsoleShogi
           [sente_player, gote_player].each do |player|
             next unless player.win?
 
-            TerminalOperator.print_winner(player.teban)
+            TerminalOperator.print_winner(player)
             exit
           end
         end

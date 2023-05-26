@@ -27,6 +27,10 @@ module ConsoleShogi
       komadai.pieces.any? {|p| p.class == Ohsho }
     end
 
+    def win_image
+      File.read("images/#{teban}/shori.png")
+    end
+
     def capture_piece!(piece)
       @komadai.expand! unless komadai.have_space?
 
