@@ -32,6 +32,8 @@ module ConsoleShogi
           index = TerminalOperator.squares_index
 
           if selected_piece
+            next if index[:location] != :board
+
             piece_mover =
               case from_index[:location]
               when :board
