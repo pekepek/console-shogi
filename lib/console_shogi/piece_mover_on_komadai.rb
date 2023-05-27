@@ -2,64 +2,51 @@
 
 module ConsoleShogi
   class PieceMoverOnKomadai
-    def initialize(board:, komadai:, from:)
+    def initialize(board:, komadai:, from:, to:)
       @board = board
       @komadai = komadai
       # 駒台の index に直す必要がある
-      @from_piece_index = from
+      @from = from
+      @to = to
     end
 
     def drop!
-      return if target_piece.nil? || target_piece.none?
+      return if from_piece.nil? || from_piece.none?
 
-      while key = STDIN.getch
-        if key == "\e" && STDIN.getch == "["
-          key = STDIN.getch
+      return if to[:location] != :board
+      return unless can_drop?(piece: from_piece, to: to)
 
-          TerminalOperator.move_cursor(key)
-        elsif key == "\r"
-          to_piece_index = TerminalOperator.squares_index
-
-          return if to_piece_index[:location] != :board
-          return unless can_drop?(piece: target_piece, to_piece_index: to_piece_index)
-
-          komadai.pick_up_piece!(from: from_piece_index)
-          board.put_piece!(piece: target_piece, to: to_piece_index)
-
-          return
-        end
-      end
+      komadai.pick_up_piece!(from: from)
+      board.put_piece!(piece: from_piece, to: to)
     end
 
     private
 
-    attr_reader :board, :komadai, :from_piece_index
+    attr_reader :board, :komadai, :from, :to
 
-    def target_piece
-      @target_piece ||= komadai.fetch_piece(x: from_piece_index[:x], y: from_piece_index[:y])
+    def from_piece
+      @from_piece ||= komadai.fetch_piece(x: from[:x], y: from[:y])
     end
 
-    def can_drop?(piece:, to_piece_index:)
-      to_piece = board.fetch_piece(x: to_piece_index[:x], y: to_piece_index[:y])
+    def can_drop?(piece:, to:)
+      to_piece = board.fetch_piece(x: to[:x], y: to[:y])
 
       return false unless to_piece.none?
 
-      return false if nifu?(piece, to_piece_index)
+      return false if nifu?(piece, to)
 
-      can_move_next_turn?(piece, to_piece_index)
+      can_move_next_turn?(piece, to)
     end
 
-    def can_move_next_turn?(piece, to_piece_index)
-      piece_mover = PieceMover.new(board: board, from: to_piece_index)
-
+    def can_move_next_turn?(piece, to)
       piece.moves.any? {|m|
-        piece_mover.can_move?(piece: piece, to_piece_index: {x: to_piece_index[:x] + m[:x], y: to_piece_index[:y] + m[:y]})
+        PieceMover.new(board: board, from: to, to: {x: to[:x] + m[:x], y: to[:y] + m[:y]}).can_move?
       }
     end
 
-    def nifu?(piece, to_piece_index)
+    def nifu?(piece, to)
       piece.fu? &&
-        board.matrix.column(to_piece_index[:x]).any? {|p| p.fu? && piece.teban == p.teban }
+        board.matrix.column(to[:x]).any? {|p| p.fu? && piece.teban == p.teban }
     end
   end
 end

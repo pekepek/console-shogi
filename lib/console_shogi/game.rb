@@ -7,7 +7,10 @@ module ConsoleShogi
     def initialize
       @sente_player = Player.new(teban: Teban::SENTE)
       @gote_player = Player.new(teban: Teban::GOTE)
-      @board = NewBoardBuilder.build
+      @board = NewBoardBuilder.build(sente_player: @sente_player, gote_player: @gote_player)
+
+      @from_index = nil
+      @selected_piece = false
     end
 
     def start
@@ -27,17 +30,27 @@ module ConsoleShogi
           # TODO このまま Hash にするかは要検討
           index = TerminalOperator.squares_index
 
-          case index[:location]
-          when :board
-            PieceMover.new(board: board, from: index).move!
-          when :sente_komadai
-            PieceMoverOnKomadai.new(board: board, komadai: sente_player.komadai, from: index).drop!
-          when :gote_komadai
-            PieceMoverOnKomadai.new(board: board, komadai: gote_player.komadai, from: index).drop!
-          end
+          if selected_piece
+            case from_index[:location]
+            when :board
+              PieceMover.new(board: board, from: from_index, to: index).move!
+            when :sente_komadai
+              PieceMoverOnKomadai.new(board: board, komadai: sente_player.komadai, from: from_index, to: index).drop!
+            when :gote_komadai
+              PieceMoverOnKomadai.new(board: board, komadai: gote_player.komadai, from: from_index, to: index).drop!
+            end
 
-          # TODO 描写に時間がかかるので、差分のみ表示できる様にする
-          TerminalOperator.print_board(board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
+            # TODO 描写に時間がかかるので、差分のみ表示できる様にする
+            TerminalOperator.print_board(board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
+
+            @from_index = nil
+            @selected_piece = false
+          else
+            next if index[:location] == :none
+
+            @from_index = index
+            @selected_piece = true
+          end
 
           # TODO ひとまず動く物を作った。リファクタリングする
           [sente_player, gote_player].each do |player|
@@ -52,6 +65,6 @@ module ConsoleShogi
 
     private
 
-    attr_reader :board, :sente_player, :gote_player
+    attr_reader :board, :sente_player, :gote_player, :selected_piece, :from_index
   end
 end
