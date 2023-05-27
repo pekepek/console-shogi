@@ -6,23 +6,15 @@ module ConsoleShogi
       @board = board
       @from = from
       @to = to
+      @moved_piece = false
     end
 
     def move!
-      return if from_piece.nil? || from_piece.none?
+      @moved_piece = move_piece!
+    end
 
-      return unless can_move?
-
-      board.move_piece!(
-        from: {x: from[:x], y: from[:y]},
-        to: {x: to[:x], y: to[:y]}
-      )
-
-      # TODO とりあえずここに実装してしまっている。整理したい
-      piece = board.fetch_piece(x: to[:x], y: to[:y])
-      return unless can_promote?(piece, from, to)
-
-      board.promote_piece!(x: to[:x], y: to[:y]) if TerminalOperator.select_promotion
+    def moved_piece?
+      @moved_piece
     end
 
     def can_move?
@@ -53,6 +45,25 @@ module ConsoleShogi
     private
 
     attr_reader :board, :from, :to
+
+    def move_piece!
+      return false if from_piece.nil? || from_piece.none?
+
+      return false unless can_move?
+
+      board.move_piece!(
+        from: {x: from[:x], y: from[:y]},
+        to: {x: to[:x], y: to[:y]}
+      )
+
+      # TODO とりあえずここに実装してしまっている。整理したい
+      piece = board.fetch_piece(x: to[:x], y: to[:y])
+      return true unless can_promote?(piece, from, to)
+
+      board.promote_piece!(x: to[:x], y: to[:y]) if TerminalOperator.select_promotion
+
+      true
+    end
 
     def from_piece
       @from_piece ||= board.fetch_piece(x: from[:x], y: from[:y])
