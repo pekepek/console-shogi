@@ -53,6 +53,7 @@ module ConsoleShogi
 
     def move_piece!
       return false if from_piece.nil? || from_piece.none?
+      return false if from_piece.teban != player.teban
 
       return false unless can_move?
 

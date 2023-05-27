@@ -57,7 +57,10 @@ module ConsoleShogi
             @from_index = nil
             @selected_piece = false
           else
+            # TODO PieceMover の can_move? と分散してしまっている気もする
             next if index[:location] == :none
+            next if teban_player.sente? && index[:location] == :gote_komadai
+            next if teban_player.gote? && index[:location] == :sente_komadai
 
             @from_index = index
             @selected_piece = true
