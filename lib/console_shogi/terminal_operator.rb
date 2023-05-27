@@ -115,6 +115,11 @@ module ConsoleShogi
         print EscapeSequence::OUTSIDE_BOARD
       end
 
+      def debug
+        print EscapeSequence::OUTSIDE_BOARD
+        binding.pry
+      end
+
       private
 
       IMAGE_HEIGHT_PIXEL = 240
