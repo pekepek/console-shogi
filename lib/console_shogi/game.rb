@@ -11,6 +11,7 @@ module ConsoleShogi
 
       @from_index = nil
       @selected_piece = false
+      @teban = @sente_player
     end
 
     def start
@@ -31,17 +32,23 @@ module ConsoleShogi
           index = TerminalOperator.squares_index
 
           if selected_piece
-            case from_index[:location]
-            when :board
-              PieceMover.new(board: board, from: from_index, to: index).move!
-            when :sente_komadai
-              PieceMoverOnKomadai.new(board: board, komadai: sente_player.komadai, from: from_index, to: index).drop!
-            when :gote_komadai
-              PieceMoverOnKomadai.new(board: board, komadai: gote_player.komadai, from: from_index, to: index).drop!
-            end
+            piece_mover =
+              case from_index[:location]
+              when :board
+                PieceMover.new(board: board, from: from_index, to: index)
+              when :sente_komadai
+                PieceMoverOnKomadai.new(board: board, komadai: sente_player.komadai, from: from_index, to: index)
+              when :gote_komadai
+                PieceMoverOnKomadai.new(board: board, komadai: gote_player.komadai, from: from_index, to: index)
+              end
 
-            # TODO 描写に時間がかかるので、差分のみ表示できる様にする
-            TerminalOperator.print_board(board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
+            piece_mover.move!
+
+            if piece_mover.moved_piece?
+              # TODO 描写に時間がかかるので、差分のみ表示できる様にする
+              TerminalOperator.print_board(board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
+              change_teban!
+            end
 
             @from_index = nil
             @selected_piece = false
@@ -65,6 +72,10 @@ module ConsoleShogi
 
     private
 
-    attr_reader :board, :sente_player, :gote_player, :selected_piece, :from_index
+    attr_reader :board, :sente_player, :gote_player, :selected_piece, :from_index, :teban
+
+    def change_teban!
+      @teban = teban == sente_player ? gote_player : sente_player
+    end
   end
 end
