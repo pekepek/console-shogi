@@ -34,16 +34,8 @@ module ConsoleShogi
     end
 
     def move_piece!(from:, to:)
-      from_piece = @pieces[from[:y], from[:x]]
+      @pieces[to[:y], to[:x]] = @pieces[from[:y], from[:x]]
       @pieces[from[:y], from[:x]] = NonePiece.new
-
-      to_piece = @pieces[to[:y], to[:x]]
-
-      # NOTE 駒を取る、リファクタする
-      #      from_piece.player で player 取るの違和感
-      from_piece.player.capture_piece!(to_piece) unless to_piece.none?
-
-      @pieces[to[:y], to[:x]] = from_piece
     end
 
     private

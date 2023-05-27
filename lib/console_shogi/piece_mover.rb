@@ -2,8 +2,9 @@
 
 module ConsoleShogi
   class PieceMover
-    def initialize(board:, from:, to:)
+    def initialize(board:, player:, from:, to:)
       @board = board
+      @player = player
       @from = from
       @to = to
       @moved_piece = false
@@ -26,7 +27,7 @@ module ConsoleShogi
 
       to_piece = board.fetch_piece(x: to[:x], y: to[:y])
 
-      return false if piece.teban == to_piece.teban
+      return false if from_piece.teban == to_piece.teban
 
       return true unless from_piece.can_move_long_distance?
 
@@ -44,12 +45,19 @@ module ConsoleShogi
 
     private
 
-    attr_reader :board, :from, :to
+    attr_reader :board, :player, :from, :to
+
+    def from_piece
+      @from_piece ||= board.fetch_piece(x: from[:x], y: from[:y])
+    end
 
     def move_piece!
       return false if from_piece.nil? || from_piece.none?
 
       return false unless can_move?
+
+      to_piece = board.fetch_piece(x: to[:x], y: to[:y])
+      player.capture_piece!(to_piece) unless to_piece.none?
 
       board.move_piece!(
         from: {x: from[:x], y: from[:y]},
@@ -57,24 +65,19 @@ module ConsoleShogi
       )
 
       # TODO とりあえずここに実装してしまっている。整理したい
-      piece = board.fetch_piece(x: to[:x], y: to[:y])
-      return true unless can_promote?(piece, from, to)
+      return true unless can_promote?(from_piece, from, to)
 
       board.promote_piece!(x: to[:x], y: to[:y]) if TerminalOperator.select_promotion
 
       true
     end
 
-    def from_piece
-      @from_piece ||= board.fetch_piece(x: from[:x], y: from[:y])
-    end
-
     def can_promote?(piece, from, to)
       return false unless piece.can_promote?
 
-      if piece == Teban::SENTE
+      if piece.teban == Teban::SENTE
         from[:y].between?(0, 2) || to[:y].between?(0, 2)
-      elsif piece == Teban::GOTE
+      elsif piece.teban == Teban::GOTE
         from[:y].between?(6, 8) || to[:y].between?(6, 8)
       end
     end

@@ -7,7 +7,7 @@ module ConsoleShogi
     def initialize
       @sente_player = Player.new(teban: Teban::SENTE)
       @gote_player = Player.new(teban: Teban::GOTE)
-      @board = NewBoardBuilder.build(sente_player: @sente_player, gote_player: @gote_player)
+      @board = NewBoardBuilder.build
 
       @from_index = nil
       @selected_piece = false
@@ -38,7 +38,7 @@ module ConsoleShogi
             piece_mover =
               case from_index[:location]
               when :board
-                PieceMover.new(board: board, from: from_index, to: index)
+                PieceMover.new(board: board, player: teban_player, from: from_index, to: index)
               when :sente_komadai
                 PieceMoverOnKomadai.new(board: board, komadai: sente_player.komadai, from: from_index, to: index)
               when :gote_komadai

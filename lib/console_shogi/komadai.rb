@@ -17,7 +17,7 @@ module ConsoleShogi
     end
 
     def put(piece:)
-      expand! unless komadai.have_space?
+      expand! unless have_space?
 
       index = pieces.index(&:none?)
 

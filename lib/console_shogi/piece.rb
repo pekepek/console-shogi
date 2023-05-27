@@ -237,10 +237,10 @@ module ConsoleShogi
   end
 
   class PromotedPiece < Piece
-    attr_reader :player, :original
+    attr_reader :teban, :original
 
     def initialize(original: nil)
-      @player = original.player
+      @teban = original.teban
       @original = original
     end
 
