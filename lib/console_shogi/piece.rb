@@ -38,18 +38,6 @@ module ConsoleShogi
       self::class == NonePiece
     end
 
-    def kaku?
-      self::class == Kaku
-    end
-
-    def hisha?
-      self::class == Hisha
-    end
-
-    def kyosha?
-      self::class == Kyosha
-    end
-
     def fu?
       self::class == Fu
     end
@@ -66,6 +54,10 @@ module ConsoleShogi
 
     def change_player!(player)
       @player = player
+    end
+
+    def can_move_long_distance?
+      [Kaku, Hisha, Kyosha, PromotedPiece::Uma, PromotedPiece::Ryu].include?(self::class)
     end
   end
 

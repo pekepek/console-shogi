@@ -36,7 +36,7 @@ module ConsoleShogi
 
       return false if from_piece.player.teban == to_piece.player.teban
 
-      return true unless from_piece.kaku? || from_piece.hisha? || from_piece.kyosha?
+      return true unless from_piece.can_move_long_distance?
 
       distance = (diff[:x].nonzero? || diff[:y]).abs
       element = [diff[:x] / distance, diff[:y] / distance]
