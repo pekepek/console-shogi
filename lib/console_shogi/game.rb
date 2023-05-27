@@ -11,7 +11,7 @@ module ConsoleShogi
 
       @from_index = nil
       @selected_piece = false
-      @teban = @sente_player
+      @teban_player = @sente_player
     end
 
     def start
@@ -74,10 +74,10 @@ module ConsoleShogi
 
     private
 
-    attr_reader :board, :sente_player, :gote_player, :selected_piece, :from_index, :teban
+    attr_reader :board, :sente_player, :gote_player, :selected_piece, :from_index, :teban_player
 
     def change_teban!
-      @teban = teban == sente_player ? gote_player : sente_player
+      @teban_player = teban_player == sente_player ? gote_player : sente_player
     end
   end
 end
