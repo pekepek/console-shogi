@@ -14,10 +14,16 @@ module ConsoleShogi
       KOMADAI_GOTE_START_Y = 1
       KOMADAI_SENTE_START_Y = 7
 
+      TEBAN = {
+        sente: '先手',
+        gote: '後手'
+      }
+
       module EscapeSequence
         RESET = "\e[0m"
         RESET_CURSOR = "\e[1;1H"
         SCREEN_CLEAR = "\e[2J"
+        SCREEN_CLEAR_AFTER_CURSOR = "\e[0J"
         OUTSIDE_BOARD = "\e[10;1H"
         CURRENT_POSITION = "\e[6n"
       end
@@ -115,9 +121,14 @@ module ConsoleShogi
         print EscapeSequence::OUTSIDE_BOARD
       end
 
-      def debug
+      # TODO 見た目は後で直す
+      def print_teban(teban)
         print EscapeSequence::OUTSIDE_BOARD
-        binding.pry
+        print EscapeSequence::SCREEN_CLEAR_AFTER_CURSOR
+
+        print "手番 : #{TEBAN[teban.to_sym]}"
+
+        back_to_cursor
       end
 
       private

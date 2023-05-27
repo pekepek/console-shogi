@@ -16,6 +16,7 @@ module ConsoleShogi
 
     def start
       TerminalOperator.print_board(board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
+      TerminalOperator.print_teban(teban_player.teban)
 
       while key = STDIN.getch
         # NOTE Ctrl-C を押したら終了
@@ -50,6 +51,7 @@ module ConsoleShogi
               # TODO 描写に時間がかかるので、差分のみ表示できる様にする
               TerminalOperator.print_board(board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
               change_teban!
+              TerminalOperator.print_teban(teban_player.teban)
             end
 
             @from_index = nil
