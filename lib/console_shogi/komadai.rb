@@ -12,22 +12,16 @@ module ConsoleShogi
       @pieces = empty_pieces
     end
 
-    def expand!
-      @pieces = pieces.hstack(empty_pieces)
-    end
-
-    def have_space?
-      pieces.any?(&:none?)
-    end
-
     def fetch_piece(x:, y:)
       pieces[y, x]
     end
 
     def put(piece:)
+      expand! unless komadai.have_space?
+
       index = pieces.index(&:none?)
 
-      raise NoSpaceError if index.nil?
+      piece = piece.original if piece.promoted?
 
       @pieces[*index] = piece
 
@@ -40,6 +34,14 @@ module ConsoleShogi
     end
 
     private
+
+    def expand!
+      @pieces = pieces.hstack(empty_pieces)
+    end
+
+    def have_space?
+      pieces.any?(&:none?)
+    end
 
     def sort_pieces
       column_num = pieces.count / 3

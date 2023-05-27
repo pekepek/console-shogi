@@ -45,7 +45,7 @@ module ConsoleShogi
 
       to_piece = board.fetch_piece(x: to_piece_index[:x], y: to_piece_index[:y])
 
-      return false if piece.player.teban == to_piece.player.teban
+      return false if piece.teban == to_piece.teban
 
       return true unless piece.kaku? || piece.hisha? || piece.kyosha?
 
@@ -72,9 +72,9 @@ module ConsoleShogi
     def can_promote?(piece, from, to)
       return false unless piece.can_promote?
 
-      if piece.player.sente?
+      if piece == Teban::SENTE
         from[:y].between?(0, 2) || to[:y].between?(0, 2)
-      elsif piece.player.gote?
+      elsif piece == Teban::GOTE
         from[:y].between?(6, 8) || to[:y].between?(6, 8)
       end
     end

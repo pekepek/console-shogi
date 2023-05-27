@@ -2,10 +2,10 @@
 
 module ConsoleShogi
   class Piece
-    attr_reader :player
+    attr_accessor :teban
 
-    def initialize(player: nil)
-      @player = player
+    def initialize(teban: nil)
+      @teban = teban
     end
 
     def move
@@ -27,11 +27,7 @@ module ConsoleShogi
     end
 
     def image
-      if player.sente?
-        File.read("images/sente/#{self::class.name.split('::').last.downcase}.png")
-      else
-        File.read("images/gote/#{self::class.name.split('::').last.downcase}.png")
-      end
+      File.read("images/#{teban}/#{self::class.name.split('::').last.downcase}.png")
     end
 
     def none?
@@ -57,15 +53,11 @@ module ConsoleShogi
     def moves
       ms = base_moves
 
-      if player.sente?
+      if teban == Teban::SENTE
         ms
       else
         ms.map {|m| m.transform_values {|v| v * -1 } }
       end
-    end
-
-    def change_player!(player)
-      @player = player
     end
   end
 
@@ -76,8 +68,8 @@ module ConsoleShogi
       []
     end
 
-    def player
-      NonPlayer.new
+    def image
+      File.read("images/nonepiece.png")
     end
 
     def can_promote?

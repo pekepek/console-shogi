@@ -3,52 +3,41 @@
 module ConsoleShogi
   class NewBoardBuilder
     class << self
-      def build(sente_player: , gote_player:)
+      def build
         Board.new(
           pieces: [
             [
-              Kyosha.new(player: gote_player),
-              Keima.new(player: gote_player),
-              Gin.new(player: gote_player),
-              Kin.new(player: gote_player),
-              Ohsho.new(player: gote_player),
-              Kin.new(player: gote_player),
-              Gin.new(player: gote_player),
-              Keima.new(player: gote_player),
-              Kyosha.new(player: gote_player)
+              Kyosha.new(teban: Teban::GOTE),
+              Keima.new(teban: Teban::GOTE),
+              Gin.new(teban: Teban::GOTE),
+              Kin.new(teban: Teban::GOTE),
+              Ohsho.new(teban: Teban::GOTE),
+              Kin.new(teban: Teban::GOTE),
+              Gin.new(teban: Teban::GOTE),
+              Keima.new(teban: Teban::GOTE),
+              Kyosha.new(teban: Teban::GOTE)
             ],
             [
               NonePiece.new,
-              Hisha.new(player: gote_player),
+              Hisha.new(teban: Teban::GOTE),
               NonePiece.new,
               NonePiece.new,
               NonePiece.new,
               NonePiece.new,
               NonePiece.new,
-              Kaku.new(player: gote_player),
+              Kaku.new(teban: Teban::GOTE),
               NonePiece.new
             ],
             [
-              Fu.new(player: gote_player),
-              Fu.new(player: gote_player),
-              Fu.new(player: gote_player),
-              Fu.new(player: gote_player),
-              Fu.new(player: gote_player),
-              Fu.new(player: gote_player),
-              Fu.new(player: gote_player),
-              Fu.new(player: gote_player),
-              Fu.new(player: gote_player)
-            ],
-            [
-              NonePiece.new,
-              NonePiece.new,
-              NonePiece.new,
-              NonePiece.new,
-              NonePiece.new,
-              NonePiece.new,
-              NonePiece.new,
-              NonePiece.new,
-              NonePiece.new
+              Fu.new(teban: Teban::GOTE),
+              Fu.new(teban: Teban::GOTE),
+              Fu.new(teban: Teban::GOTE),
+              Fu.new(teban: Teban::GOTE),
+              Fu.new(teban: Teban::GOTE),
+              Fu.new(teban: Teban::GOTE),
+              Fu.new(teban: Teban::GOTE),
+              Fu.new(teban: Teban::GOTE),
+              Fu.new(teban: Teban::GOTE)
             ],
             [
               NonePiece.new,
@@ -73,37 +62,48 @@ module ConsoleShogi
               NonePiece.new
             ],
             [
-              Fu.new(player: sente_player),
-              Fu.new(player: sente_player),
-              Fu.new(player: sente_player),
-              Fu.new(player: sente_player),
-              Fu.new(player: sente_player),
-              Fu.new(player: sente_player),
-              Fu.new(player: sente_player),
-              Fu.new(player: sente_player),
-              Fu.new(player: sente_player)
-            ],
-            [
-              NonePiece.new,
-              Kaku.new(player: sente_player),
               NonePiece.new,
               NonePiece.new,
               NonePiece.new,
               NonePiece.new,
               NonePiece.new,
-              Hisha.new(player: sente_player),
+              NonePiece.new,
+              NonePiece.new,
+              NonePiece.new,
               NonePiece.new
             ],
             [
-              Kyosha.new(player: sente_player),
-              Keima.new(player: sente_player),
-              Gin.new(player: sente_player),
-              Kin.new(player: sente_player),
-              Ohsho.new(player: sente_player),
-              Kin.new(player: sente_player),
-              Gin.new(player: sente_player),
-              Keima.new(player: sente_player),
-              Kyosha.new(player: sente_player)
+              Fu.new(teban: Teban::SENTE),
+              Fu.new(teban: Teban::SENTE),
+              Fu.new(teban: Teban::SENTE),
+              Fu.new(teban: Teban::SENTE),
+              Fu.new(teban: Teban::SENTE),
+              Fu.new(teban: Teban::SENTE),
+              Fu.new(teban: Teban::SENTE),
+              Fu.new(teban: Teban::SENTE),
+              Fu.new(teban: Teban::SENTE)
+            ],
+            [
+              NonePiece.new,
+              Kaku.new(teban: Teban::SENTE),
+              NonePiece.new,
+              NonePiece.new,
+              NonePiece.new,
+              NonePiece.new,
+              NonePiece.new,
+              Hisha.new(teban: Teban::SENTE),
+              NonePiece.new
+            ],
+            [
+              Kyosha.new(teban: Teban::SENTE),
+              Keima.new(teban: Teban::SENTE),
+              Gin.new(teban: Teban::SENTE),
+              Kin.new(teban: Teban::SENTE),
+              Ohsho.new(teban: Teban::SENTE),
+              Kin.new(teban: Teban::SENTE),
+              Gin.new(teban: Teban::SENTE),
+              Keima.new(teban: Teban::SENTE),
+              Kyosha.new(teban: Teban::SENTE)
             ]
           ]
         )

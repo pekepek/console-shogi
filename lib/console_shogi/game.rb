@@ -5,9 +5,9 @@ require 'io/console'
 module ConsoleShogi
   class Game
     def initialize
-      @sente_player = Player.new(teban: Player::Teban::SENTE)
-      @gote_player = Player.new(teban: Player::Teban::GOTE)
-      @board = NewBoardBuilder.build(sente_player: @sente_player, gote_player: @gote_player)
+      @sente_player = Player.new(teban: Teban::SENTE)
+      @gote_player = Player.new(teban: Teban::GOTE)
+      @board = NewBoardBuilder.build
     end
 
     def start

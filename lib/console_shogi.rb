@@ -6,6 +6,7 @@ require_relative 'console_shogi/player'
 require_relative 'console_shogi/board'
 require_relative 'console_shogi/piece'
 require_relative 'console_shogi/komadai'
+require_relative 'console_shogi/teban'
 
 require_relative 'console_shogi/terminal_operator'
 require_relative 'console_shogi/new_board_builder'

@@ -2,11 +2,6 @@
 
 module ConsoleShogi
   class Player
-    module Teban
-      SENTE = :sente
-      GOTE = :gote
-    end
-
     attr_reader :teban, :komadai
 
     def initialize(teban: nil)
@@ -32,15 +27,8 @@ module ConsoleShogi
     end
 
     def capture_piece!(piece)
-      @komadai.expand! unless komadai.have_space?
-
-      piece = piece.original if piece.promoted?
-
-      piece.change_player!(self)
+      piece.teban = teban
       komadai.put(piece: piece)
     end
-  end
-
-  class NonPlayer < Player
   end
 end
