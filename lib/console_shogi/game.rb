@@ -9,13 +9,16 @@ module ConsoleShogi
       @gote_player = Player.new(teban: Teban::GOTE)
       @board = NewBoardBuilder.build
 
+      @previous_board = Board.new(pieces: [])
       @from_index = nil
       @selected_piece = false
       @teban_player = @sente_player
     end
 
     def start
-      TerminalOperator.print_board(board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
+      TerminalOperator.clear_scrren
+
+      TerminalOperator.print_diff_board(previous_board: previous_board, board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
       TerminalOperator.print_teban(teban_player.teban)
 
       while key = STDIN.getch
@@ -48,9 +51,11 @@ module ConsoleShogi
             piece_mover.move!
 
             if piece_mover.moved_piece?
-              # TODO 描写に時間がかかるので、差分のみ表示できる様にする
-              TerminalOperator.print_board(board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
+              TerminalOperator.print_diff_board(previous_board: previous_board, board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
+
+              @previous_board = board.copy
               change_teban!
+
               TerminalOperator.print_teban(teban_player.teban)
             end
 
@@ -79,7 +84,7 @@ module ConsoleShogi
 
     private
 
-    attr_reader :board, :sente_player, :gote_player, :selected_piece, :from_index, :teban_player
+    attr_reader :board, :sente_player, :gote_player, :selected_piece, :from_index, :teban_player, :previous_board
 
     def change_teban!
       @teban_player = teban_player == sente_player ? gote_player : sente_player

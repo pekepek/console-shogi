@@ -12,6 +12,10 @@ module ConsoleShogi
       @pieces
     end
 
+    def copy
+      Board.new(pieces: pieces.to_a)
+    end
+
     def within_range?(x:, y:)
       case {x: x, y: y}
       in x: 0..8, y: 0..8

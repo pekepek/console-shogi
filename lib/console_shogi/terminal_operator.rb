@@ -26,6 +26,7 @@ module ConsoleShogi
         SCREEN_CLEAR_AFTER_CURSOR = "\e[0J"
         OUTSIDE_BOARD = "\e[10;1H"
         CURRENT_POSITION = "\e[6n"
+        MOVE_RIGHT_2 = "\e[2C"
       end
 
       module Location
@@ -43,16 +44,23 @@ module ConsoleShogi
         @image_height ||= calculate_fit_image_height
       end
 
-      def print_board(board:, sente_komadai:, gote_komadai:)
-        # NOTE 画面をクリア
+      def clear_scrren
         print EscapeSequence::SCREEN_CLEAR
 
-        # NOTE カーソルを1行1列に移動
+        print EscapeSequence::RESET_CURSOR
+      end
+
+      # TODO 駒台の表示方法も考える
+      def print_diff_board(previous_board:, board:, sente_komadai:, gote_komadai:)
         print EscapeSequence::RESET_CURSOR
 
         board.matrix.row_vectors.each_with_index do |vector, i|
           vector.each_with_index do |piece, j|
-            print_image(image: piece.image, height: image_height)
+            if previous_board.matrix[i, j] == piece
+              print EscapeSequence::MOVE_RIGHT_2
+            else
+              print_image(image: piece.image, height: image_height)
+            end
           end
 
           print "#{EscapeSequence::RESET}\n"
