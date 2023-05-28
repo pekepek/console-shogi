@@ -46,13 +46,8 @@ module ConsoleShogi
 
       return false if nifu?(piece, to)
 
-      can_move_next_turn?(piece, to)
-    end
-
-    def can_move_next_turn?(piece, to)
-      piece.moves.any? {|m|
-        PieceMovementChecker.new(board: board, from: to, to: {x: to[:x] + m[:x], y: to[:y] + m[:y]}).can_move?
-      }
+      # TODO 動かせない場所に打つことはできないようにする
+      true
     end
 
     def nifu?(piece, to)

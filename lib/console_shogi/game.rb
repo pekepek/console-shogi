@@ -67,6 +67,8 @@ module ConsoleShogi
             next if teban_player.sente? && index[:location] == :gote_komadai
             next if teban_player.gote? && index[:location] == :sente_komadai
 
+            active_piece(index)
+
             @from_index = index
             @selected_piece = true
           end
@@ -88,6 +90,18 @@ module ConsoleShogi
 
     def change_teban!
       @teban_player = teban_player == sente_player ? gote_player : sente_player
+    end
+
+    def active_piece(index)
+      # TODO case で指定しないといけないのイケてないのでリファクタしたい
+      case index[:location]
+      when :board
+        TerminalOperator.active_piece(location: board, piece_index: index)
+      when :sente_komadai
+        TerminalOperator.active_piece(location: sente_player.komadai, piece_index: index)
+      when :gote_komadai
+        TerminalOperator.active_piece(location: gote_player.komadai, piece_index: index)
+      end
     end
   end
 end

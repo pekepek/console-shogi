@@ -74,10 +74,13 @@ module ConsoleShogi
         back_to_cursor
       end
 
-      def active_piece(board:, piece_index:)
+      def active_piece(location:, piece_index:)
         back_to_cursor
 
-        board.fetch_piece(x: piece_index[:x], y: piece_index[:y])
+        piece = location.fetch_piece(x: piece_index[:x], y: piece_index[:y])
+        print_image(image: piece.active_image, height: image_height)
+
+        back_to_cursor
       end
 
       def move_cursor(key)
