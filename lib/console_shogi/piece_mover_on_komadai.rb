@@ -51,7 +51,7 @@ module ConsoleShogi
 
     def can_move_next_turn?(piece, to)
       piece.moves.any? {|m|
-        PieceMover.new(board: board, from: to, to: {x: to[:x] + m[:x], y: to[:y] + m[:y]}).can_move?
+        PieceMovementChecker.new(board: board, from: to, to: {x: to[:x] + m[:x], y: to[:y] + m[:y]}).can_move?
       }
     end
 

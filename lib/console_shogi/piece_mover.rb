@@ -18,31 +18,6 @@ module ConsoleShogi
       @moved_piece
     end
 
-    def can_move?
-      return false unless board.within_range?(x: to[:x], y: to[:y])
-
-      diff = {x: to[:x] - from[:x], y: to[:y] - from[:y]}
-
-      return false if from_piece.moves.none? {|m| m[:x] == diff[:x] && m[:y] == diff[:y] }
-
-      to_piece = board.fetch_piece(x: to[:x], y: to[:y])
-
-      return false if from_piece.teban == to_piece.teban
-
-      return true unless from_piece.can_move_long_distance?
-
-      distance = (diff[:x].nonzero? || diff[:y]).abs
-      element = [diff[:x] / distance, diff[:y] / distance]
-
-      1.upto(distance - 1) do |d|
-        piece = board.fetch_piece(x: from[:x] + element[0] * d, y: from[:y] + element[1] * d)
-
-        return false unless piece.none?
-      end
-
-      true
-    end
-
     private
 
     attr_reader :board, :player, :from, :to
@@ -55,7 +30,7 @@ module ConsoleShogi
       return false if from_piece.nil? || from_piece.none?
       return false if from_piece.teban != player.teban
 
-      return false unless can_move?
+      return false unless piece_movement_checker.can_move?
 
       to_piece = board.fetch_piece(x: to[:x], y: to[:y])
       player.capture_piece!(to_piece) unless to_piece.none?
@@ -71,6 +46,10 @@ module ConsoleShogi
       board.promote_piece!(x: to[:x], y: to[:y]) if TerminalOperator.select_promotion
 
       true
+    end
+
+    def piece_movement_checker
+      PieceMovementChecker.new(board: board, from: from, to: to)
     end
 
     def can_promote?(piece, from, to)
