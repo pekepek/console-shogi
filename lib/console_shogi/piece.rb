@@ -245,11 +245,18 @@ module ConsoleShogi
   end
 
   class PromotedPiece < Piece
-    attr_reader :teban, :original
+    attr_reader :original
 
     def initialize(original: nil)
-      @teban = original.teban
       @original = original
+    end
+
+    def teban
+      original.teban
+    end
+
+    def teban=(val)
+      original.teban = val
     end
 
     def can_promote?
