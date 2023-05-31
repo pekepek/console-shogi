@@ -8,7 +8,10 @@ require_relative 'console_shogi/piece'
 require_relative 'console_shogi/komadai'
 require_relative 'console_shogi/teban'
 
-require_relative 'console_shogi/terminal_operator'
+require_relative 'console_shogi/terminal/display_area'
+require_relative 'console_shogi/terminal/operator'
+require_relative 'console_shogi/terminal/cursor'
+
 require_relative 'console_shogi/new_board_builder'
 require_relative 'console_shogi/piece_mover'
 require_relative 'console_shogi/piece_mover_on_komadai'

@@ -26,6 +26,7 @@ module ConsoleShogi
     def move_piece!
       return false if from_piece.nil? || from_piece.none?
 
+      # TODO ここで location の key もってるの期待してるの酷い、修正する
       return false if to[:location] != :board
       return false unless can_drop?(piece: from_piece, to: to)
 

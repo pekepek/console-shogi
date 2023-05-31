@@ -43,7 +43,7 @@ module ConsoleShogi
       # TODO とりあえずここに実装してしまっている。整理したい
       return true unless can_promote?(from_piece, from, to)
 
-      board.promote_piece!(x: to[:x], y: to[:y]) if TerminalOperator.select_promotion
+      board.promote_piece!(x: to[:x], y: to[:y]) if Terminal::Operator.select_promotion
 
       true
     end
