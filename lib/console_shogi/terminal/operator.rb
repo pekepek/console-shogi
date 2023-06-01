@@ -60,6 +60,15 @@ module ConsoleShogi
           back_to_cursor
         end
 
+        def deactive_piece(location:, previous_cursor:)
+          print "\e[#{previous_cursor.terminal_position.y};#{previous_cursor.terminal_position.x}H"
+
+          piece = location.fetch_piece(x: previous_cursor.squares_position.x, y: previous_cursor.squares_position.y)
+          print_image(image: piece.image, height: image_height)
+
+          back_to_cursor
+        end
+
         def active_piece(location:, cursor:)
           back_to_cursor
 

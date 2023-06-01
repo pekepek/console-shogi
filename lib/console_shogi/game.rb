@@ -73,6 +73,8 @@ module ConsoleShogi
               change_teban!
 
               Terminal::Operator.print_teban(teban_player.teban)
+            else
+              deactive_piece(from_cursor)
             end
 
             @from_cursor = nil
@@ -117,6 +119,18 @@ module ConsoleShogi
         Terminal::Operator.active_piece(location: sente_player.komadai, cursor: cursor)
       when :gote_komadai
         Terminal::Operator.active_piece(location: gote_player.komadai, cursor: cursor)
+      end
+    end
+
+    def deactive_piece(cursor)
+      # TODO case で指定しないといけないのイケてないのでリファクタしたい
+      case cursor.squares_position.location
+      when :board
+        Terminal::Operator.deactive_piece(location: board, previous_cursor: cursor)
+      when :sente_komadai
+        Terminal::Operator.deactive_piece(location: sente_player.komadai, previous_cursor: cursor)
+      when :gote_komadai
+        Terminal::Operator.deactive_piece(location: gote_player.komadai, previous_cursor: cursor)
       end
     end
   end
