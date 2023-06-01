@@ -34,6 +34,10 @@ module ConsoleShogi
       File.read("images/active/#{teban}/#{self::class.name.split('::').last.downcase}.png")
     end
 
+    def focused_image
+      File.read("images/focused/#{teban}/#{self::class.name.split('::').last.downcase}.png")
+    end
+
     def none?
       self::class == NonePiece
     end
@@ -74,6 +78,10 @@ module ConsoleShogi
 
     def active_image
       File.read("images/active/nonepiece.png")
+    end
+
+    def focused_image
+      File.read("images/focused/nonepiece.png")
     end
 
     def can_promote?
