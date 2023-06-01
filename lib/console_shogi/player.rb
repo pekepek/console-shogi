@@ -23,7 +23,7 @@ module ConsoleShogi
     end
 
     def win_image
-      File.read("images/#{teban}/shori.png")
+      File.read("images/#{teban}_shori.png")
     end
 
     def capture_piece!(piece)
