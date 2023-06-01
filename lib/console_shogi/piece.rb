@@ -27,11 +27,11 @@ module ConsoleShogi
     end
 
     def image
-      File.read("images/#{teban}/#{self::class.name.split('::').last.downcase}.png")
+      File.read("images/nomal/#{teban}/#{self::class.name.split('::').last.downcase}.png")
     end
 
     def active_image
-      File.read("images/#{teban}/active/#{self::class.name.split('::').last.downcase}.png")
+      File.read("images/active/#{teban}/#{self::class.name.split('::').last.downcase}.png")
     end
 
     def none?
@@ -69,11 +69,11 @@ module ConsoleShogi
     end
 
     def image
-      File.read("images/nonepiece.png")
+      File.read("images/nomal/nonepiece.png")
     end
 
     def active_image
-      File.read("images/active_nonepiece.png")
+      File.read("images/active/nonepiece.png")
     end
 
     def can_promote?
