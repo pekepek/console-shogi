@@ -1,6 +1,7 @@
 # console-shogi
 
 You can play the Shogi in your terminal ☗☖
+
 Maybe, you’ll hard to see if you don’t increase the font size of the terminal.
 
 ## Installation
