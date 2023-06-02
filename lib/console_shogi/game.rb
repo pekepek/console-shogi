@@ -13,14 +13,15 @@ module ConsoleShogi
       @from_cursor = nil
       @selected_piece = false
       @teban_player = @sente_player
-    end
 
-    def start
       Terminal::Operator.clear_scrren
 
       Terminal::Operator.print_diff_board(previous_board: previous_board, board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
+      Terminal::Operator.print_history_button
       Terminal::Operator.print_teban(teban_player.teban)
+    end
 
+    def start
       while key = STDIN.getch
         # NOTE Ctrl-C を押したら終了
         if key == "\C-c"

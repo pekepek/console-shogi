@@ -17,7 +17,9 @@ module ConsoleShogi
           RESET_CURSOR = "\e[1;1H"
           SCREEN_CLEAR = "\e[2J"
           SCREEN_CLEAR_AFTER_CURSOR = "\e[0J"
-          OUTSIDE_BOARD = "\e[10;1H"
+          SCREEN_CLEAR_NOW_LINE = "\e[2K"
+          MOVE_HISTORY_AREA = "\e[#{DisplayArea::OutSide::History::START_INDEX[:x]};#{DisplayArea::OutSide::History::START_INDEX[:y]}H"
+          MOVE_INFOMATION_AREA = "\e[#{DisplayArea::OutSide::Infomation::START_INDEX[:x]};#{DisplayArea::OutSide::Infomation::START_INDEX[:y]}H"
           CURRENT_POSITION = "\e[6n"
           MOVE_RIGHT_2 = "\e[2C"
         end
@@ -91,7 +93,7 @@ module ConsoleShogi
         end
 
         def select_promotion
-          print EscapeSequence::OUTSIDE_BOARD
+          print EscapeSequence::MOVE_INFOMATION_AREA
 
           prompt = TTY::Prompt.new
 
@@ -106,15 +108,27 @@ module ConsoleShogi
 
           print_image(image: player.win_image, height: image_height * 3)
 
-          print EscapeSequence::OUTSIDE_BOARD
+          print EscapeSequence::MOVE_INFOMATION_AREA
         end
 
         # TODO 見た目は後で直す
         def print_teban(teban)
-          print EscapeSequence::OUTSIDE_BOARD
+          print EscapeSequence::MOVE_INFOMATION_AREA
           print EscapeSequence::SCREEN_CLEAR_AFTER_CURSOR
 
           print "手番 : #{TEBAN[teban.to_sym]}"
+
+          back_to_cursor
+        end
+
+        # TODO データの指定の仕方は後で整理する
+        def print_history_button
+          print EscapeSequence::MOVE_HISTORY_AREA
+          print EscapeSequence::SCREEN_CLEAR_NOW_LINE
+
+          print_image(image: File.read("images/history_button/left.png"), height: image_height)
+          print_image(image: File.read("images/history_button/right.png"), height: image_height)
+          print_image(image: File.read("images/history_button/play.png"), height: image_height)
 
           back_to_cursor
         end

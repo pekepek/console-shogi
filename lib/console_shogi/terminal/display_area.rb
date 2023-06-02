@@ -22,8 +22,16 @@ module ConsoleShogi
       end
 
       module OutSide
-        START_INDEX = {x: 10, y: 1}
-        RANGE = {x: Range.new(START_INDEX[:x], nil), y: Range.new(START_INDEX[:y], nil)}
+        module History
+          START_INDEX = {x: 10, y: 1}
+          END_INDEX = {x: 10, y: nil}
+          RANGE = {x: Range.new(START_INDEX[:x], END_INDEX[:x]), y: Range.new(START_INDEX[:y], END_INDEX[:x])}
+        end
+
+        module Infomation
+          START_INDEX = {x: 11, y: 1}
+          RANGE = {x: Range.new(START_INDEX[:x], nil), y: Range.new(START_INDEX[:y], nil)}
+        end
       end
     end
   end
