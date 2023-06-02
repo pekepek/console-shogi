@@ -29,7 +29,14 @@ module ConsoleShogi
         elsif key == "\e" && STDIN.getch == "["
           key = STDIN.getch
 
-          Terminal::Operator.cursor.move(key)
+          cursor = Terminal::Operator.cursor
+          @previous_cursor_on_square = cursor.dup unless cursor.squares_position.location == :none
+
+          cursor.move(key)
+
+          # TODO 選択したピースは色を変えないようにしている。状態の持ち方を見直したい
+          deactive_piece(previous_cursor_on_square) unless selected_piece && from_cursor.squares_position == previous_cursor_on_square.squares_position
+          focus_piece(cursor) unless selected_piece && from_cursor.squares_position == cursor.squares_position
         # NOTE Enter を押したら駒を移動
         elsif key == "\r"
           # TODO このまま Hash にするかは要検討
@@ -104,7 +111,7 @@ module ConsoleShogi
 
     private
 
-    attr_reader :board, :sente_player, :gote_player, :selected_piece, :from_cursor, :teban_player, :previous_board
+    attr_reader :board, :sente_player, :gote_player, :selected_piece, :from_cursor, :teban_player, :previous_board, :previous_cursor_on_square
 
     def change_teban!
       @teban_player = teban_player == sente_player ? gote_player : sente_player
@@ -131,6 +138,18 @@ module ConsoleShogi
         Terminal::Operator.deactive_piece(location: sente_player.komadai, previous_cursor: cursor)
       when :gote_komadai
         Terminal::Operator.deactive_piece(location: gote_player.komadai, previous_cursor: cursor)
+      end
+    end
+
+    def focus_piece(cursor)
+      # TODO case で指定しないといけないのイケてないのでリファクタしたい
+      case cursor.squares_position.location
+      when :board
+        Terminal::Operator.focus_piece(location: board, cursor: cursor)
+      when :sente_komadai
+        Terminal::Operator.focus_piece(location: sente_player.komadai, cursor: cursor)
+      when :gote_komadai
+        Terminal::Operator.focus_piece(location: gote_player.komadai, cursor: cursor)
       end
     end
   end
