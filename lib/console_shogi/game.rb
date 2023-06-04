@@ -12,15 +12,16 @@ module ConsoleShogi
       @previous_board = Board.new(pieces: [])
       @selected_cursor = nil
       @teban_player = @sente_player
+
+      Terminal::Operator.clear_scrren
+      Terminal::Operator.print_diff_board(previous_board: previous_board, board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
+      Terminal::Operator.print_teban(teban_player.teban)
     end
 
     def start
-      Terminal::Operator.clear_scrren
-
-      Terminal::Operator.print_diff_board(previous_board: previous_board, board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
-      Terminal::Operator.print_teban(teban_player.teban)
-
       while key = STDIN.getch
+        cursor = Terminal::Operator.cursor
+
         # NOTE Ctrl-C を押したら終了
         if key == "\C-c"
           exit
@@ -28,19 +29,15 @@ module ConsoleShogi
         elsif key == "\e" && STDIN.getch == "["
           key = STDIN.getch
 
-          cursor = Terminal::Operator.cursor
-          @previous_cursor_on_grid = cursor.dup unless cursor.grid_position.location == :others
+          @last_cursor_on_grid = cursor.dup unless cursor.grid_position.location == :others
 
           cursor.move(key)
 
           # TODO 選択したピースは色を変えないようにしている。状態の持ち方を見直したい
-          deactive_piece(previous_cursor_on_grid) if selected_cursor&.grid_position != previous_cursor_on_grid.grid_position
+          deactive_piece(last_cursor_on_grid) if selected_cursor&.grid_position != last_cursor_on_grid.grid_position
           focus_piece(cursor) if selected_cursor&.grid_position != cursor.grid_position
         # NOTE Enter を押したら駒を移動
         elsif key == "\r"
-          # TODO このまま Hash にするかは要検討
-          cursor = Terminal::Operator.cursor
-
           if selected_cursor.nil?
             # TODO PieceMover の can_move? と分散してしまっている気もする
             next if cursor.grid_position.location == :others
@@ -59,22 +56,21 @@ module ConsoleShogi
               Terminal::Operator.print_diff_board(previous_board: previous_board, board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
 
               @previous_board = board.copy
-              change_teban!
 
-              Terminal::Operator.print_teban(teban_player.teban)
+              if teban_player.win?
+                Terminal::Operator.print_winner(teban_player)
+
+                exit
+              else
+                change_teban!
+
+                Terminal::Operator.print_teban(teban_player.teban)
+              end
             else
               deactive_piece(selected_cursor)
             end
 
             @selected_cursor = nil
-          end
-
-          # TODO ひとまず動く物を作った。リファクタリングする
-          [sente_player, gote_player].each do |player|
-            next unless player.win?
-
-            Terminal::Operator.print_winner(player)
-            exit
           end
         end
       end
@@ -82,7 +78,7 @@ module ConsoleShogi
 
     private
 
-    attr_reader :board, :sente_player, :gote_player, :selected_cursor, :teban_player, :previous_board, :previous_cursor_on_grid
+    attr_reader :board, :sente_player, :gote_player, :selected_cursor, :teban_player, :previous_board, :last_cursor_on_grid
 
     def change_teban!
       @teban_player = teban_player == sente_player ? gote_player : sente_player
