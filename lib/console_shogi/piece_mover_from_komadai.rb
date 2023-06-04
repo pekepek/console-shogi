@@ -1,47 +1,40 @@
 # frozen_string_literal: true
 
 module ConsoleShogi
-  class PieceMoverOnKomadai
-    def initialize(board:, komadai:, from:, to:)
+  class PieceMoverFromKomadai < PieceMover
+    def initialize(board:, player:, from:, to:)
       @board = board
-      @komadai = komadai
-      # 駒台の index に直す必要がある
+      @komadai = player.komadai
+      @player = player
       @from = from
       @to = to
       @moved_piece = false
     end
 
-    def move!
-      @moved_piece = move_piece!
-    end
-
-    def moved_piece?
-      @moved_piece
-    end
-
     private
 
-    attr_reader :board, :komadai, :from, :to
+    attr_reader :board, :komadai, :player, :from, :to
 
     def move_piece!
       return false if from_piece.nil? || from_piece.none?
+      return false if from_piece.teban != player.teban
 
       # TODO ここで location の key もってるの期待してるの酷い、修正する
-      return false if to[:location] != :board
+      return false if to.location != :board
       return false unless can_drop?(piece: from_piece, to: to)
 
-      komadai.pick_up_piece!(from: from)
+      komadai.pick_up_piece!(x: from.x, y: from.y)
       board.put_piece!(piece: from_piece, to: to)
 
       true
     end
 
     def from_piece
-      @from_piece ||= komadai.fetch_piece(x: from[:x], y: from[:y])
+      @from_piece ||= komadai.fetch_piece(x: from.x, y: from.y)
     end
 
     def can_drop?(piece:, to:)
-      to_piece = board.fetch_piece(x: to[:x], y: to[:y])
+      to_piece = board.fetch_piece(x: to.x, y: to.y)
 
       return false unless to_piece.none?
 
@@ -53,7 +46,7 @@ module ConsoleShogi
 
     def nifu?(piece, to)
       piece.fu? &&
-        board.matrix.column(to[:x]).any? {|p| p.fu? && piece.teban == p.teban }
+        board.matrix.column(to.x).any? {|p| p.fu? && piece.teban == p.teban }
     end
   end
 end

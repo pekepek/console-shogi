@@ -1,25 +1,17 @@
 module ConsoleShogi
   module Terminal
     class Cursor
-      module Location
-        NONE = :none
-        BOARD = :board
-        SENTE_KOMADAI = :sente_komadai
-        GOTE_KOMADAI = :gote_komadai
-      end
-
       TerminalPosition = Struct.new(:x, :y)
-      SquaresPosition = Struct.new(:x, :y, :location)
 
       VERTICAL_DISTANCE = 1
       HORIZONTAL_DISTANCE = 2
       CURSOR_DIRECTIONS = %w(A B C D)
 
-      attr_reader :terminal_position, :squares_position
+      attr_reader :terminal_position, :grid_position
 
       def initialize(terminal_index_x: 1, terminal_index_y: 1)
         @terminal_position = TerminalPosition.new(x: 1, y: 1)
-        @squares_position = SquaresPosition.new(**calculate_squares_position)
+        @grid_position = GridPosition.new(**calculate_grid_position)
       end
 
       def move(direction)
@@ -44,19 +36,21 @@ module ConsoleShogi
         positions = fetch_cursor_position_in_stdin
 
         @terminal_position = TerminalPosition.new(x: positions[2].to_i, y: positions[1].to_i)
-        @squares_position = SquaresPosition.new(**calculate_squares_position)
+        @grid_position = GridPosition.new(**calculate_grid_position)
       end
 
-      def calculate_squares_position
-        case terminal_position.to_h
-        in x: 1..18, y: 1..9
-          {x: (terminal_position.x - 1) / HORIZONTAL_DISTANCE, y: terminal_position.y - 1, location: Location::BOARD}
-        in x: 21..38, y: 1..3
-          {x: (terminal_position.x - 21) / HORIZONTAL_DISTANCE, y: terminal_position.y - 1, location: Location::GOTE_KOMADAI}
-        in x: 21..38, y: 7..9
-          {x: (terminal_position.x - 21) / HORIZONTAL_DISTANCE, y: terminal_position.y - 7, location: Location::SENTE_KOMADAI}
+      def calculate_grid_position
+        area = DisplayArea.fetch_area(x: terminal_position.x, y: terminal_position.y)
+
+        # TODO history や infomation の扱いを整理する
+        if area.outside?
+          {x: nil, y: nil, location: :outside}
         else
-          {x: (terminal_position.x - 1) / HORIZONTAL_DISTANCE, y: terminal_position.y - 1, location: Location::NONE}
+          {
+            x: (terminal_position.x - area.start_position.x) / HORIZONTAL_DISTANCE,
+            y: terminal_position.y - area.start_position.y,
+            location: area.location
+          }
         end
       end
 

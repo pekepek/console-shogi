@@ -18,8 +18,8 @@ module ConsoleShogi
           SCREEN_CLEAR = "\e[2J"
           SCREEN_CLEAR_AFTER_CURSOR = "\e[0J"
           SCREEN_CLEAR_NOW_LINE = "\e[2K"
-          MOVE_HISTORY_AREA = "\e[#{DisplayArea::OutSide::History::START_INDEX[:x]};#{DisplayArea::OutSide::History::START_INDEX[:y]}H"
-          MOVE_INFOMATION_AREA = "\e[#{DisplayArea::OutSide::Infomation::START_INDEX[:x]};#{DisplayArea::OutSide::Infomation::START_INDEX[:y]}H"
+          MOVE_HISTORY_AREA = "\e[#{DisplayArea::History.start_position.y};#{DisplayArea::History.start_position.x}H"
+          MOVE_INFOMATION_AREA = "\e[#{DisplayArea::Infomation.start_position.y};#{DisplayArea::Infomation.start_position.x}H"
           CURRENT_POSITION = "\e[6n"
           MOVE_RIGHT_2 = "\e[2C"
         end
@@ -55,15 +55,15 @@ module ConsoleShogi
           end
 
           # NOTE 駒台を表示
-          print_komadai(komadai: sente_komadai, **DisplayArea::Komadai::Sente::START_INDEX)
-          print_komadai(komadai: gote_komadai, **DisplayArea::Komadai::Gote::START_INDEX)
+          print_komadai(komadai: sente_komadai, start_position: DisplayArea::Komadai::Sente.start_position)
+          print_komadai(komadai: gote_komadai, start_position: DisplayArea::Komadai::Gote.start_position)
 
           # NOTE back a cursor
           back_to_cursor
         end
 
         def focus_piece(location:, cursor:)
-          piece = location.fetch_piece(x: cursor.squares_position.x, y: cursor.squares_position.y)
+          piece = location.fetch_piece(x: cursor.grid_position.x, y: cursor.grid_position.y)
 
           return if piece.nil?
 
@@ -75,7 +75,7 @@ module ConsoleShogi
         def deactive_piece(location:, previous_cursor:)
           print "\e[#{previous_cursor.terminal_position.y};#{previous_cursor.terminal_position.x}H"
 
-          piece = location.fetch_piece(x: previous_cursor.squares_position.x, y: previous_cursor.squares_position.y)
+          piece = location.fetch_piece(x: previous_cursor.grid_position.x, y: previous_cursor.grid_position.y)
 
           print_image(image: piece.image, height: image_height) unless piece.nil?
 
@@ -83,7 +83,7 @@ module ConsoleShogi
         end
 
         def active_piece(location:, cursor:)
-          piece = location.fetch_piece(x: cursor.squares_position.x, y: cursor.squares_position.y)
+          piece = location.fetch_piece(x: cursor.grid_position.x, y: cursor.grid_position.y)
 
           return if piece.nil?
 
@@ -154,9 +154,9 @@ module ConsoleShogi
         end
 
         # TODO view 用の Player 作って整理する
-        def print_komadai(komadai:, x:, y:)
+        def print_komadai(komadai:, start_position:)
           komadai.pieces.row_vectors.each_with_index do |row_pieces, i|
-            print "\e[#{y + i};#{x}H"
+            print "\e[#{start_position.y + i};#{start_position.x}H"
 
             row_pieces.each do |p|
               print_image(image: p.image, height: image_height)
