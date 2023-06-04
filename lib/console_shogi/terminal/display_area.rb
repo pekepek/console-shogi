@@ -10,15 +10,11 @@ module ConsoleShogi
 
       class << self
         def fetch_area(x:, y:)
-          if Board.in?(x: x, y: y)
-            Board
-          elsif Komadai::Gote.in?(x: x, y: y)
-            Komadai::Gote
-          elsif Komadai::Sente.in?(x: x, y: y)
-            Komadai::Sente
-          else
-            Others
+          [Board, Komadai::Gote, Komadai::Sente, History, Infomation].each do |klass|
+            return klass if klass.in?(x: x, y: y)
           end
+
+          Others
         end
 
         def start_position
@@ -74,8 +70,8 @@ module ConsoleShogi
       end
 
       class Infomation < DisplayArea
-        START_POSITION = Position.new(x: 1, y: 10)
-        END_POSITION = Position.new(x: 18, y: 10)
+        START_POSITION = Position.new(x: 1, y: 11)
+        END_POSITION = Position.new(x: 18, y: 15)
         LOCATION = :infomation
 
         def self.outside?
