@@ -28,8 +28,8 @@ module ConsoleShogi
       @pieces = sort_pieces
     end
 
-    def pick_up_piece!(from:)
-      @pieces[from[:y], from[:x]] = NonePiece.new
+    def pick_up_piece!(x:, y:)
+      @pieces[y, x] = NonePiece.new
       @pieces = sort_pieces
     end
 

@@ -28,21 +28,21 @@ module ConsoleShogi
       return false if from_piece.teban != player.teban
 
       # TODO ここで location の key もってるの期待してるの酷い、修正する
-      return false if to[:location] != :board
+      return false if to.location != :board
       return false unless can_drop?(piece: from_piece, to: to)
 
-      komadai.pick_up_piece!(from: from)
+      komadai.pick_up_piece!(x: from.x, y: from.y)
       board.put_piece!(piece: from_piece, to: to)
 
       true
     end
 
     def from_piece
-      @from_piece ||= komadai.fetch_piece(x: from[:x], y: from[:y])
+      @from_piece ||= komadai.fetch_piece(x: from.x, y: from.y)
     end
 
     def can_drop?(piece:, to:)
-      to_piece = board.fetch_piece(x: to[:x], y: to[:y])
+      to_piece = board.fetch_piece(x: to.x, y: to.y)
 
       return false unless to_piece.none?
 
@@ -54,7 +54,7 @@ module ConsoleShogi
 
     def nifu?(piece, to)
       piece.fu? &&
-        board.matrix.column(to[:x]).any? {|p| p.fu? && piece.teban == p.teban }
+        board.matrix.column(to.x).any? {|p| p.fu? && piece.teban == p.teban }
     end
   end
 end

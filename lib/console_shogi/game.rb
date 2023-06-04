@@ -30,37 +30,37 @@ module ConsoleShogi
           key = STDIN.getch
 
           cursor = Terminal::Operator.cursor
-          @previous_cursor_on_square = cursor.dup unless cursor.squares_position.location == :none
+          @previous_cursor_on_square = cursor.dup unless cursor.grid_position.location == :others
 
           cursor.move(key)
 
           # TODO 選択したピースは色を変えないようにしている。状態の持ち方を見直したい
-          deactive_piece(previous_cursor_on_square) unless selected_piece && from_cursor.squares_position == previous_cursor_on_square.squares_position
-          focus_piece(cursor) unless selected_piece && from_cursor.squares_position == cursor.squares_position
+          deactive_piece(previous_cursor_on_square) unless selected_piece && from_cursor.grid_position == previous_cursor_on_square.grid_position
+          focus_piece(cursor) unless selected_piece && from_cursor.grid_position == cursor.grid_position
         # NOTE Enter を押したら駒を移動
         elsif key == "\r"
           # TODO このまま Hash にするかは要検討
           cursor = Terminal::Operator.cursor
 
           if selected_piece
-            next if cursor.squares_position.location != :board
+            next if cursor.grid_position.location != :board
 
             piece_mover =
-              case from_cursor.squares_position.location
+              case from_cursor.grid_position.location
               when :board
                 # TODO 後で index を統一的にどう扱うか整理する
                 PieceMover.new(
                   board: board,
                   player: teban_player,
-                  from: from_cursor.squares_position.to_h,
-                  to: cursor.squares_position.to_h
+                  from: from_cursor.grid_position,
+                  to: cursor.grid_position
                 )
               when :sente_komadai, :gote_komadai
                 PieceMoverOnKomadai.new(
                   board: board,
                   player: teban_player,
-                  from: from_cursor.squares_position.to_h,
-                  to: cursor.squares_position.to_h
+                  from: from_cursor.grid_position,
+                  to: cursor.grid_position
                 )
               end
 
@@ -81,7 +81,7 @@ module ConsoleShogi
             @selected_piece = false
           else
             # TODO PieceMover の can_move? と分散してしまっている気もする
-            next if cursor.squares_position.location == :none
+            next if cursor.grid_position.location == :others
 
             active_piece(cursor)
 
@@ -110,7 +110,7 @@ module ConsoleShogi
 
     def active_piece(cursor)
       # TODO case で指定しないといけないのイケてないのでリファクタしたい
-      case cursor.squares_position.location
+      case cursor.grid_position.location
       when :board
         Terminal::Operator.active_piece(location: board, cursor: cursor)
       when :sente_komadai
@@ -122,7 +122,7 @@ module ConsoleShogi
 
     def deactive_piece(cursor)
       # TODO case で指定しないといけないのイケてないのでリファクタしたい
-      case cursor.squares_position.location
+      case cursor.grid_position.location
       when :board
         Terminal::Operator.deactive_piece(location: board, previous_cursor: cursor)
       when :sente_komadai
@@ -134,7 +134,7 @@ module ConsoleShogi
 
     def focus_piece(cursor)
       # TODO case で指定しないといけないのイケてないのでリファクタしたい
-      case cursor.squares_position.location
+      case cursor.grid_position.location
       when :board
         Terminal::Operator.focus_piece(location: board, cursor: cursor)
       when :sente_komadai
