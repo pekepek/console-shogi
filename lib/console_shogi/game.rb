@@ -45,24 +45,7 @@ module ConsoleShogi
           if selected_piece
             next if cursor.grid_position.location != :board
 
-            piece_mover =
-              case from_cursor.grid_position.location
-              when :board
-                # TODO 後で index を統一的にどう扱うか整理する
-                PieceMover.new(
-                  board: board,
-                  player: teban_player,
-                  from: from_cursor.grid_position,
-                  to: cursor.grid_position
-                )
-              when :sente_komadai, :gote_komadai
-                PieceMoverOnKomadai.new(
-                  board: board,
-                  player: teban_player,
-                  from: from_cursor.grid_position,
-                  to: cursor.grid_position
-                )
-              end
+            piece_mover = PieceMover.build(board: board, player: teban_player, from_cursor: from_cursor, to_cursor: cursor)
 
             piece_mover.move!
 

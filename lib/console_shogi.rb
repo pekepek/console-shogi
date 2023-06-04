@@ -15,7 +15,8 @@ require_relative 'console_shogi/terminal/cursor'
 
 require_relative 'console_shogi/new_board_builder'
 require_relative 'console_shogi/piece_mover'
-require_relative 'console_shogi/piece_mover_on_komadai'
+require_relative 'console_shogi/piece_mover_from_board'
+require_relative 'console_shogi/piece_mover_from_komadai'
 require_relative 'console_shogi/piece_movement_checker'
 
 module ConsoleShogi

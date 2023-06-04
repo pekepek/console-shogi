@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ConsoleShogi
-  class PieceMoverOnKomadai
+  class PieceMoverFromKomadai < PieceMover
     def initialize(board:, player:, from:, to:)
       @board = board
       @komadai = player.komadai
@@ -9,14 +9,6 @@ module ConsoleShogi
       @from = from
       @to = to
       @moved_piece = false
-    end
-
-    def move!
-      @moved_piece = move_piece!
-    end
-
-    def moved_piece?
-      @moved_piece
     end
 
     private
