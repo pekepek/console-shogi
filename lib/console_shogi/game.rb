@@ -30,12 +30,12 @@ module ConsoleShogi
           key = STDIN.getch
 
           cursor = Terminal::Operator.cursor
-          @previous_cursor_on_square = cursor.dup unless cursor.grid_position.location == :others
+          @previous_cursor_on_grid = cursor.dup unless cursor.grid_position.location == :others
 
           cursor.move(key)
 
           # TODO 選択したピースは色を変えないようにしている。状態の持ち方を見直したい
-          deactive_piece(previous_cursor_on_square) unless selected_piece && from_cursor.grid_position == previous_cursor_on_square.grid_position
+          deactive_piece(previous_cursor_on_grid) unless selected_piece && from_cursor.grid_position == previous_cursor_on_grid.grid_position
           focus_piece(cursor) unless selected_piece && from_cursor.grid_position == cursor.grid_position
         # NOTE Enter を押したら駒を移動
         elsif key == "\r"
@@ -85,7 +85,7 @@ module ConsoleShogi
 
     private
 
-    attr_reader :board, :sente_player, :gote_player, :selected_piece, :from_cursor, :teban_player, :previous_board, :previous_cursor_on_square
+    attr_reader :board, :sente_player, :gote_player, :selected_piece, :from_cursor, :teban_player, :previous_board, :previous_cursor_on_grid
 
     def change_teban!
       @teban_player = teban_player == sente_player ? gote_player : sente_player
