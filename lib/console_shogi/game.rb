@@ -10,8 +10,7 @@ module ConsoleShogi
       @board = NewBoardBuilder.build
 
       @previous_board = Board.new(pieces: [])
-      @from_cursor = nil
-      @selected_piece = false
+      @selected_cursor = nil
       @teban_player = @sente_player
     end
 
@@ -35,17 +34,24 @@ module ConsoleShogi
           cursor.move(key)
 
           # TODO 選択したピースは色を変えないようにしている。状態の持ち方を見直したい
-          deactive_piece(previous_cursor_on_grid) unless selected_piece && from_cursor.grid_position == previous_cursor_on_grid.grid_position
-          focus_piece(cursor) unless selected_piece && from_cursor.grid_position == cursor.grid_position
+          deactive_piece(previous_cursor_on_grid) if selected_cursor&.grid_position != previous_cursor_on_grid.grid_position
+          focus_piece(cursor) if selected_cursor&.grid_position != cursor.grid_position
         # NOTE Enter を押したら駒を移動
         elsif key == "\r"
           # TODO このまま Hash にするかは要検討
           cursor = Terminal::Operator.cursor
 
-          if selected_piece
+          if selected_cursor.nil?
+            # TODO PieceMover の can_move? と分散してしまっている気もする
+            next if cursor.grid_position.location == :others
+
+            active_piece(cursor)
+
+            @selected_cursor = cursor.dup
+          else
             next if cursor.grid_position.location != :board
 
-            piece_mover = PieceMover.build(board: board, player: teban_player, from_cursor: from_cursor, to_cursor: cursor)
+            piece_mover = PieceMover.build(board: board, player: teban_player, from_cursor: selected_cursor, to_cursor: cursor)
 
             piece_mover.move!
 
@@ -57,19 +63,10 @@ module ConsoleShogi
 
               Terminal::Operator.print_teban(teban_player.teban)
             else
-              deactive_piece(from_cursor)
+              deactive_piece(selected_cursor)
             end
 
-            @from_cursor = nil
-            @selected_piece = false
-          else
-            # TODO PieceMover の can_move? と分散してしまっている気もする
-            next if cursor.grid_position.location == :others
-
-            active_piece(cursor)
-
-            @from_cursor = cursor.dup
-            @selected_piece = true
+            @selected_cursor = nil
           end
 
           # TODO ひとまず動く物を作った。リファクタリングする
@@ -85,7 +82,7 @@ module ConsoleShogi
 
     private
 
-    attr_reader :board, :sente_player, :gote_player, :selected_piece, :from_cursor, :teban_player, :previous_board, :previous_cursor_on_grid
+    attr_reader :board, :sente_player, :gote_player, :selected_cursor, :teban_player, :previous_board, :previous_cursor_on_grid
 
     def change_teban!
       @teban_player = teban_player == sente_player ? gote_player : sente_player
