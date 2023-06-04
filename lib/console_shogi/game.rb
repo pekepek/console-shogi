@@ -55,17 +55,10 @@ module ConsoleShogi
                   from: from_cursor.squares_position.to_h,
                   to: cursor.squares_position.to_h
                 )
-              when :sente_komadai
+              when :sente_komadai, :gote_komadai
                 PieceMoverOnKomadai.new(
                   board: board,
-                  komadai: sente_player.komadai,
-                  from: from_cursor.squares_position.to_h,
-                  to: cursor.squares_position.to_h
-                )
-              when :gote_komadai
-                PieceMoverOnKomadai.new(
-                  board: board,
-                  komadai: gote_player.komadai,
+                  player: teban_player,
                   from: from_cursor.squares_position.to_h,
                   to: cursor.squares_position.to_h
                 )
@@ -89,8 +82,6 @@ module ConsoleShogi
           else
             # TODO PieceMover の can_move? と分散してしまっている気もする
             next if cursor.squares_position.location == :none
-            next if teban_player.sente? && cursor.squares_position.location == :gote_komadai
-            next if teban_player.gote? && cursor.squares_position.location == :sente_komadai
 
             active_piece(cursor)
 

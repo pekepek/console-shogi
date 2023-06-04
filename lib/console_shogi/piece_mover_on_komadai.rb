@@ -2,10 +2,10 @@
 
 module ConsoleShogi
   class PieceMoverOnKomadai
-    def initialize(board:, komadai:, from:, to:)
+    def initialize(board:, player:, from:, to:)
       @board = board
-      @komadai = komadai
-      # 駒台の index に直す必要がある
+      @komadai = player.komadai
+      @player = player
       @from = from
       @to = to
       @moved_piece = false
@@ -21,10 +21,11 @@ module ConsoleShogi
 
     private
 
-    attr_reader :board, :komadai, :from, :to
+    attr_reader :board, :komadai, :player, :from, :to
 
     def move_piece!
       return false if from_piece.nil? || from_piece.none?
+      return false if from_piece.teban != player.teban
 
       # TODO ここで location の key もってるの期待してるの酷い、修正する
       return false if to[:location] != :board
