@@ -4,15 +4,16 @@ module ConsoleShogi
   class PieceMover
     class << self
       def build(board:, player:, from_cursor:, to_cursor:)
-        case from_cursor.grid_position.location
-        when :board
+        location = from_cursor.grid_position.location
+
+        if location.board?
           PieceMoverFromBoard.new(
             board: board,
             player: player,
             from: from_cursor.grid_position,
             to: to_cursor.grid_position
           )
-        when :sente_komadai, :gote_komadai
+        elsif location.komadai?
           PieceMoverFromKomadai.new(
             board: board,
             player: player,

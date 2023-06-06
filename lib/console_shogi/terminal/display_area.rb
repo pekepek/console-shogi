@@ -25,12 +25,20 @@ module ConsoleShogi
           self::END_POSITION
         end
 
-        def location
-          self::LOCATION
+        def name
+          self::NAME
+        end
+
+        def board?
+          Board == self
+        end
+
+        def komadai?
+          [Komadai::Gote, Komadai::Sente].include?(self)
         end
 
         def outside?
-          false
+          [History, Infomation, Others].include?(self)
         end
 
         def in?(x:, y:)
@@ -42,51 +50,39 @@ module ConsoleShogi
       class Board < DisplayArea
         START_POSITION = Position.new(x: 1, y: 1)
         END_POSITION = Position.new(x: 18, y: 9)
-        LOCATION = :board
+        NAME = :board
       end
 
       module Komadai
         class Gote < DisplayArea
           START_POSITION = Position.new(x: 21, y: 1)
           END_POSITION = Position.new(x: 38, y: 3)
-          LOCATION = :gote_komadai
+          NAME = :gote_komadai
         end
 
         class Sente < DisplayArea
           START_POSITION = Position.new(x: 21, y: 7)
           END_POSITION = Position.new(x: 38, y: 9)
-          LOCATION = :sente_komadai
+          NAME = :sente_komadai
         end
       end
 
       class History < DisplayArea
         START_POSITION = Position.new(x: 1, y: 10)
         END_POSITION = Position.new(x: 18, y: 10)
-        LOCATION = :history
-
-        def self.outside?
-          true
-        end
+        NAME = :history
       end
 
       class Infomation < DisplayArea
         START_POSITION = Position.new(x: 1, y: 11)
         END_POSITION = Position.new(x: 18, y: 15)
-        LOCATION = :infomation
-
-        def self.outside?
-          true
-        end
+        NAME = :infomation
       end
 
       class Others < DisplayArea
         START_POSITION = Position.new(x: nil, y: nil)
         END_POSITION = Position.new(x: nil, y: nil)
-        LOCATION = :others
-
-        def self.outside?
-          true
-        end
+        NAME = :others
       end
     end
   end

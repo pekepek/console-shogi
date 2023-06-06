@@ -30,7 +30,7 @@ module ConsoleShogi
         elsif key == "\e" && STDIN.getch == "["
           key = STDIN.getch
 
-          @last_cursor_on_grid = cursor.dup unless cursor.grid_position.location == :outside
+          @last_cursor_on_grid = cursor.dup unless cursor.grid_position.location.outside?
 
           cursor.move(key)
 
@@ -41,13 +41,13 @@ module ConsoleShogi
         elsif key == "\r"
           if selected_cursor.nil?
             # TODO PieceMover の can_move? と分散してしまっている気もする
-            next if cursor.grid_position.location == :outside
+            next if cursor.grid_position.location.outside?
 
             active_piece(cursor)
 
             @selected_cursor = cursor.dup
           else
-            next if cursor.grid_position.location != :board
+            next unless cursor.grid_position.location.board?
 
             piece_mover = PieceMover.build(board: board, player: teban_player, from_cursor: selected_cursor, to_cursor: cursor)
 
@@ -87,37 +87,37 @@ module ConsoleShogi
 
     def active_piece(cursor)
       # TODO case で指定しないといけないのイケてないのでリファクタしたい
-      case cursor.grid_position.location
+      case cursor.grid_position.location.name
       when :board
-        Terminal::Operator.active_piece(location: board, cursor: cursor)
+        Terminal::Operator.active_piece(board: board, cursor: cursor)
       when :sente_komadai
-        Terminal::Operator.active_piece(location: sente_player.komadai, cursor: cursor)
+        Terminal::Operator.active_piece(board: sente_player.komadai, cursor: cursor)
       when :gote_komadai
-        Terminal::Operator.active_piece(location: gote_player.komadai, cursor: cursor)
+        Terminal::Operator.active_piece(board: gote_player.komadai, cursor: cursor)
       end
     end
 
     def deactive_piece(cursor)
       # TODO case で指定しないといけないのイケてないのでリファクタしたい
-      case cursor.grid_position.location
+      case cursor.grid_position.location.name
       when :board
-        Terminal::Operator.deactive_piece(location: board, previous_cursor: cursor)
+        Terminal::Operator.deactive_piece(board: board, previous_cursor: cursor)
       when :sente_komadai
-        Terminal::Operator.deactive_piece(location: sente_player.komadai, previous_cursor: cursor)
+        Terminal::Operator.deactive_piece(board: sente_player.komadai, previous_cursor: cursor)
       when :gote_komadai
-        Terminal::Operator.deactive_piece(location: gote_player.komadai, previous_cursor: cursor)
+        Terminal::Operator.deactive_piece(board: gote_player.komadai, previous_cursor: cursor)
       end
     end
 
     def focus_piece(cursor)
       # TODO case で指定しないといけないのイケてないのでリファクタしたい
-      case cursor.grid_position.location
+      case cursor.grid_position.location.name
       when :board
-        Terminal::Operator.focus_piece(location: board, cursor: cursor)
+        Terminal::Operator.focus_piece(board: board, cursor: cursor)
       when :sente_komadai
-        Terminal::Operator.focus_piece(location: sente_player.komadai, cursor: cursor)
+        Terminal::Operator.focus_piece(board: sente_player.komadai, cursor: cursor)
       when :gote_komadai
-        Terminal::Operator.focus_piece(location: gote_player.komadai, cursor: cursor)
+        Terminal::Operator.focus_piece(board: gote_player.komadai, cursor: cursor)
       end
     end
   end

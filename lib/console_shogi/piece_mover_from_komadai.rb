@@ -19,8 +19,7 @@ module ConsoleShogi
       return false if from_piece.nil? || from_piece.none?
       return false if from_piece.teban != player.teban
 
-      # TODO ここで location の key もってるの期待してるの酷い、修正する
-      return false if to.location != :board
+      return false unless to.location.board?
       return false unless can_drop?(piece: from_piece, to: to)
 
       komadai.pick_up_piece!(x: from.x, y: from.y)
