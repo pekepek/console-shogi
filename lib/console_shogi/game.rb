@@ -85,39 +85,39 @@ module ConsoleShogi
       @teban_player = teban_player == sente_player ? gote_player : sente_player
     end
 
+    # TODO ここらへんイケてないのでリファクタしたい
     def active_piece(cursor)
-      # TODO case で指定しないといけないのイケてないのでリファクタしたい
-      case cursor.grid_position.location.name
-      when :board
-        Terminal::Operator.active_piece(board: board, cursor: cursor)
-      when :sente_komadai
-        Terminal::Operator.active_piece(board: sente_player.komadai, cursor: cursor)
-      when :gote_komadai
-        Terminal::Operator.active_piece(board: gote_player.komadai, cursor: cursor)
-      end
+      location = fetch_piece_location_object(cursor.grid_position.location)
+
+      return if location.nil?
+
+      Terminal::Operator.active_piece(board: location, cursor: cursor)
     end
 
     def deactive_piece(cursor)
-      # TODO case で指定しないといけないのイケてないのでリファクタしたい
-      case cursor.grid_position.location.name
-      when :board
-        Terminal::Operator.deactive_piece(board: board, previous_cursor: cursor)
-      when :sente_komadai
-        Terminal::Operator.deactive_piece(board: sente_player.komadai, previous_cursor: cursor)
-      when :gote_komadai
-        Terminal::Operator.deactive_piece(board: gote_player.komadai, previous_cursor: cursor)
-      end
+      location = fetch_piece_location_object(cursor.grid_position.location)
+
+      return if location.nil?
+
+      Terminal::Operator.deactive_piece(board: location, previous_cursor: cursor)
     end
 
     def focus_piece(cursor)
-      # TODO case で指定しないといけないのイケてないのでリファクタしたい
-      case cursor.grid_position.location.name
+      location = fetch_piece_location_object(cursor.grid_position.location)
+
+      return if location.nil?
+
+      Terminal::Operator.focus_piece(board: location, cursor: cursor)
+    end
+
+    def fetch_piece_location_object(cursor_location)
+      case cursor_location.name
       when :board
-        Terminal::Operator.focus_piece(board: board, cursor: cursor)
+        board
       when :sente_komadai
-        Terminal::Operator.focus_piece(board: sente_player.komadai, cursor: cursor)
+        sente_player.komadai
       when :gote_komadai
-        Terminal::Operator.focus_piece(board: gote_player.komadai, cursor: cursor)
+        gote_player.komadai
       end
     end
   end
