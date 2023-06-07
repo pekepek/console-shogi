@@ -10,7 +10,7 @@ module ConsoleShogi
 
       class << self
         def fetch_area(x:, y:)
-          [Board, Komadai::Gote, Komadai::Sente, History, Infomation].each do |klass|
+          [Board, Komadai::Gote, Komadai::Sente, History::Back, History::Forward, History::Resume, Infomation].each do |klass|
             return klass if klass.in?(x: x, y: y)
           end
 
@@ -37,8 +37,12 @@ module ConsoleShogi
           [Komadai::Gote, Komadai::Sente].include?(self)
         end
 
+        def history?
+          [History::Back, History::Forward, History::Resume].include?(self)
+        end
+
         def outside?
-          [History, Infomation, Others].include?(self)
+          [History::Back, History::Forward, History::Resume, Infomation, Others].include?(self)
         end
 
         def in?(x:, y:)
@@ -69,8 +73,37 @@ module ConsoleShogi
 
       class History < DisplayArea
         START_POSITION = Position.new(x: 1, y: 10)
-        END_POSITION = Position.new(x: 18, y: 10)
+        END_POSITION = Position.new(x: 6, y: 10)
         NAME = :history
+
+        class << self
+          def back?
+            self == Back
+          end
+
+          def forward?
+            self == Forward
+          end
+
+          def resume?
+            self == Resume
+          end
+        end
+
+        class Back < History
+          START_POSITION = Position.new(x: 1, y: 10)
+          END_POSITION = Position.new(x: 2, y: 10)
+        end
+
+        class Forward < History
+          START_POSITION = Position.new(x: 3, y: 10)
+          END_POSITION = Position.new(x: 4, y: 10)
+        end
+
+        class Resume < History
+          START_POSITION = Position.new(x: 5, y: 10)
+          END_POSITION = Position.new(x: 6, y: 10)
+        end
       end
 
       class Infomation < DisplayArea

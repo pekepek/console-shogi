@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative 'console_shogi/version'
-require_relative 'console_shogi/game'
 require_relative 'console_shogi/player'
 require_relative 'console_shogi/board'
 require_relative 'console_shogi/piece'
@@ -13,6 +12,8 @@ require_relative 'console_shogi/terminal/display_area'
 require_relative 'console_shogi/terminal/operator'
 require_relative 'console_shogi/terminal/cursor'
 
+require_relative 'console_shogi/game'
+require_relative 'console_shogi/game_history'
 require_relative 'console_shogi/new_board_builder'
 require_relative 'console_shogi/piece_mover'
 require_relative 'console_shogi/piece_mover_from_board'

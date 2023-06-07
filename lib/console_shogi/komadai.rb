@@ -8,8 +8,12 @@ module ConsoleShogi
 
     attr_reader :pieces
 
-    def initialize
-      @pieces = empty_pieces
+    def initialize(pieces: empty_pieces)
+      @pieces = Matrix.rows(pieces)
+    end
+
+    def deep_copy
+      Komadai.new(pieces: pieces.map(&:dup).to_a)
     end
 
     def fetch_piece(x:, y:)
@@ -49,13 +53,11 @@ module ConsoleShogi
     end
 
     def empty_pieces
-      Matrix.rows(
-        [
-          [NonePiece.new, NonePiece.new, NonePiece.new],
-          [NonePiece.new, NonePiece.new, NonePiece.new],
-          [NonePiece.new, NonePiece.new, NonePiece.new]
-        ]
-      )
+      [
+        [NonePiece.new, NonePiece.new, NonePiece.new],
+        [NonePiece.new, NonePiece.new, NonePiece.new],
+        [NonePiece.new, NonePiece.new, NonePiece.new]
+      ]
     end
   end
 end

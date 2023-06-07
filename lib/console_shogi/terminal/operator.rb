@@ -14,10 +14,10 @@ module ConsoleShogi
 
         module EscapeSequence
           RESET = "\e[0m"
-          RESET_CURSOR = "\e[1;1H"
           SCREEN_CLEAR = "\e[2J"
           SCREEN_CLEAR_AFTER_CURSOR = "\e[0J"
           SCREEN_CLEAR_NOW_LINE = "\e[2K"
+          MOVE_START_POINT = "\e[1;1H"
           MOVE_HISTORY_AREA = "\e[#{DisplayArea::History.start_position.y};#{DisplayArea::History.start_position.x}H"
           MOVE_INFOMATION_AREA = "\e[#{DisplayArea::Infomation.start_position.y};#{DisplayArea::Infomation.start_position.x}H"
           CURRENT_POSITION = "\e[6n"
@@ -35,12 +35,30 @@ module ConsoleShogi
         def clear_scrren
           print EscapeSequence::SCREEN_CLEAR
 
-          print EscapeSequence::RESET_CURSOR
+          print EscapeSequence::MOVE_START_POINT
+        end
+
+        def print_board(board:, sente_komadai:, gote_komadai:)
+          print EscapeSequence::MOVE_START_POINT
+
+          board.matrix.row_vectors.each_with_index do |vector, i|
+            vector.each_with_index do |piece, j|
+              print_image(image: piece.image, height: image_height)
+            end
+
+            print "#{EscapeSequence::RESET}\n"
+          end
+
+          # NOTE 駒台を表示
+          print_komadai(komadai: sente_komadai, start_position: DisplayArea::Komadai::Sente.start_position)
+          print_komadai(komadai: gote_komadai, start_position: DisplayArea::Komadai::Gote.start_position)
+
+          back_to_cursor
         end
 
         # TODO 駒台の表示方法も考える
         def print_diff_board(previous_board:, board:, sente_komadai:, gote_komadai:)
-          print EscapeSequence::RESET_CURSOR
+          print EscapeSequence::MOVE_START_POINT
 
           board.matrix.row_vectors.each_with_index do |vector, i|
             vector.each_with_index do |piece, j|
@@ -58,7 +76,15 @@ module ConsoleShogi
           print_komadai(komadai: sente_komadai, start_position: DisplayArea::Komadai::Sente.start_position)
           print_komadai(komadai: gote_komadai, start_position: DisplayArea::Komadai::Gote.start_position)
 
-          # NOTE back a cursor
+          back_to_cursor
+        end
+
+        def print_start_history
+          print EscapeSequence::MOVE_INFOMATION_AREA
+          print EscapeSequence::SCREEN_CLEAR_AFTER_CURSOR
+
+          print '履歴モード'
+
           back_to_cursor
         end
 
@@ -148,7 +174,7 @@ module ConsoleShogi
 
           print EscapeSequence::SCREEN_CLEAR
           # NOTE カーソルを1行1列に移動
-          print EscapeSequence::RESET_CURSOR
+          print EscapeSequence::MOVE_START_POINT
 
           fixed_height
         end

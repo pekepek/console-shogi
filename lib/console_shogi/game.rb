@@ -9,12 +9,13 @@ module ConsoleShogi
       @gote_player = Player.new(teban: Teban::GOTE)
       @board = NewBoardBuilder.build
 
-      @previous_board = Board.new(pieces: [])
       @selected_cursor = nil
       @teban_player = @sente_player
 
+      @game_histories = [{board: board.deep_copy, sente_komadai: sente_player.komadai.deep_copy, gote_komadai: gote_player.komadai.deep_copy}]
+
       Terminal::Operator.clear_scrren
-      Terminal::Operator.print_diff_board(previous_board: previous_board, board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
+      Terminal::Operator.print_diff_board(previous_board: Board.new(pieces: []), board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
       Terminal::Operator.print_history_button
       Terminal::Operator.print_teban(teban_player.teban)
     end
@@ -39,6 +40,11 @@ module ConsoleShogi
           focus_piece(cursor) if selected_cursor&.grid_position != cursor.grid_position
         # NOTE Enter を押したら駒を移動
         elsif key == "\r"
+          if cursor.grid_position.location.history?
+            GameHistory.new(game_histories: game_histories).start
+            next
+          end
+
           if selected_cursor.nil?
             # TODO PieceMover の can_move? と分散してしまっている気もする
             next if cursor.grid_position.location.outside?
@@ -54,9 +60,9 @@ module ConsoleShogi
             piece_mover.move!
 
             if piece_mover.moved_piece?
-              Terminal::Operator.print_diff_board(previous_board: previous_board, board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
+              Terminal::Operator.print_diff_board(previous_board: game_histories.last[:board], board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
 
-              @previous_board = board.copy
+              @game_histories << {board: board.deep_copy, sente_komadai: sente_player.komadai.deep_copy, gote_komadai: gote_player.komadai.deep_copy}
 
               if teban_player.win?
                 Terminal::Operator.print_winner(teban_player)
@@ -79,7 +85,7 @@ module ConsoleShogi
 
     private
 
-    attr_reader :board, :sente_player, :gote_player, :selected_cursor, :teban_player, :previous_board, :last_cursor_on_grid
+    attr_reader :board, :sente_player, :gote_player, :selected_cursor, :teban_player, :game_histories, :last_cursor_on_grid
 
     def change_teban!
       @teban_player = teban_player == sente_player ? gote_player : sente_player

@@ -12,8 +12,8 @@ module ConsoleShogi
       @pieces
     end
 
-    def copy
-      Board.new(pieces: pieces.to_a)
+    def deep_copy
+      Board.new(pieces: pieces.map(&:dup).to_a)
     end
 
     def within_range?(x:, y:)
