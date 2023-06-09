@@ -15,7 +15,7 @@ module ConsoleShogi
       @game_histories = [{board: board.deep_copy, sente_komadai: sente_player.komadai.deep_copy, gote_komadai: gote_player.komadai.deep_copy}]
 
       Terminal::Operator.clear_scrren
-      Terminal::Operator.print_diff_board(previous_board: Board.new(pieces: []), board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
+      Terminal::Operator.print_board(board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
       Terminal::Operator.print_history_button
       Terminal::Operator.print_teban(teban_player.teban)
     end
@@ -42,6 +42,7 @@ module ConsoleShogi
         elsif key == "\r"
           if cursor.grid_position.location.history?
             GameHistory.new(game_histories: game_histories).start
+
             next
           end
 

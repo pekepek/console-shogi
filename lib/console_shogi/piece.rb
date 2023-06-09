@@ -63,6 +63,11 @@ module ConsoleShogi
     def can_move_long_distance?
       [Kaku, Hisha, Kyosha, PromotedPiece::Uma, PromotedPiece::Ryu].include?(self::class)
     end
+
+    def same?(piece)
+      self::class == piece::class &&
+        self.teban == piece.teban
+    end
   end
 
   class NonePiece < Piece

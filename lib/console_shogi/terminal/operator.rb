@@ -62,7 +62,7 @@ module ConsoleShogi
 
           board.matrix.row_vectors.each_with_index do |vector, i|
             vector.each_with_index do |piece, j|
-              if previous_board.matrix[i, j] == piece
+              if previous_board.matrix[i, j].nil? || previous_board.matrix[i, j].same?(piece)
                 print EscapeSequence::MOVE_RIGHT_2
               else
                 print_image(image: piece.image, height: image_height)
