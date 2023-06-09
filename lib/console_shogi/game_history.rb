@@ -39,7 +39,7 @@ module ConsoleShogi
           elsif location.back?
             next if game_count == 1
 
-            @game_count += -1
+            @game_count -= 1
 
             Terminal::Operator.print_board(board: game_histories[game_count - 1][:board], sente_komadai: game_histories[game_count - 1][:sente_komadai], gote_komadai: game_histories[game_count - 1][:gote_komadai])
           elsif location.forward?
