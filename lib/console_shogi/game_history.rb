@@ -9,12 +9,12 @@ module ConsoleShogi
       # TODO game_count という名前は分かりづらいので変える
       @game_count = game_histories.count
 
-      Terminal::Operator.print_start_history
+      Terminal::Drawer.print_start_history
     end
 
     def start
       while key = STDIN.getch
-        cursor = Terminal::Operator.cursor
+        cursor = Terminal::Drawer.cursor
 
         # NOTE Ctrl-C を押したら終了
         if key == "\C-c"
@@ -30,10 +30,10 @@ module ConsoleShogi
           next unless location.history?
 
           if location.resume?
-            Terminal::Operator.clear_scrren
+            Terminal::Drawer.clear_scrren
 
-            Terminal::Operator.print_board(board: game_histories.last[:board], sente_komadai: game_histories.last[:sente_komadai], gote_komadai: game_histories.last[:gote_komadai])
-            Terminal::Operator.print_history_button
+            Terminal::Drawer.print_board(board: game_histories.last[:board], sente_komadai: game_histories.last[:sente_komadai], gote_komadai: game_histories.last[:gote_komadai])
+            Terminal::Drawer.print_history_button
 
             return
           elsif location.back?
@@ -41,13 +41,13 @@ module ConsoleShogi
 
             @game_count -= 1
 
-            Terminal::Operator.print_board(board: game_histories[game_count - 1][:board], sente_komadai: game_histories[game_count - 1][:sente_komadai], gote_komadai: game_histories[game_count - 1][:gote_komadai])
+            Terminal::Drawer.print_board(board: game_histories[game_count - 1][:board], sente_komadai: game_histories[game_count - 1][:sente_komadai], gote_komadai: game_histories[game_count - 1][:gote_komadai])
           elsif location.forward?
             next if game_count == game_histories.count
 
             @game_count += 1
 
-            Terminal::Operator.print_board(board: game_histories[game_count - 1][:board], sente_komadai: game_histories[game_count - 1][:sente_komadai], gote_komadai: game_histories[game_count - 1][:gote_komadai])
+            Terminal::Drawer.print_board(board: game_histories[game_count - 1][:board], sente_komadai: game_histories[game_count - 1][:sente_komadai], gote_komadai: game_histories[game_count - 1][:gote_komadai])
           end
         end
       end

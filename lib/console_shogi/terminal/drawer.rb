@@ -5,7 +5,7 @@ require 'tty-prompt'
 
 module ConsoleShogi
   module Terminal
-    class Operator
+    class Drawer
       class << self
         TEBAN = {
           sente: '先手',

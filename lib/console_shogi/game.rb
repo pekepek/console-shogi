@@ -14,15 +14,15 @@ module ConsoleShogi
 
       @game_histories = [{board: board.deep_copy, sente_komadai: sente_player.komadai.deep_copy, gote_komadai: gote_player.komadai.deep_copy}]
 
-      Terminal::Operator.clear_scrren
-      Terminal::Operator.print_board(board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
-      Terminal::Operator.print_history_button
-      Terminal::Operator.print_teban(teban_player.teban)
+      Terminal::Drawer.clear_scrren
+      Terminal::Drawer.print_board(board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
+      Terminal::Drawer.print_history_button
+      Terminal::Drawer.print_teban(teban_player.teban)
     end
 
     def start
       while key = STDIN.getch
-        cursor = Terminal::Operator.cursor
+        cursor = Terminal::Drawer.cursor
 
         # NOTE Ctrl-C を押したら終了
         if key == "\C-c"
@@ -61,18 +61,18 @@ module ConsoleShogi
             piece_mover.move!
 
             if piece_mover.moved_piece?
-              Terminal::Operator.print_diff_board(previous_board: game_histories.last[:board], board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
+              Terminal::Drawer.print_diff_board(previous_board: game_histories.last[:board], board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
 
               @game_histories << {board: board.deep_copy, sente_komadai: sente_player.komadai.deep_copy, gote_komadai: gote_player.komadai.deep_copy}
 
               if teban_player.win?
-                Terminal::Operator.print_winner(teban_player)
+                Terminal::Drawer.print_winner(teban_player)
 
                 exit
               else
                 change_teban!
 
-                Terminal::Operator.print_teban(teban_player.teban)
+                Terminal::Drawer.print_teban(teban_player.teban)
               end
             else
               deactive_piece(selected_cursor)
@@ -98,7 +98,7 @@ module ConsoleShogi
 
       return if location.nil?
 
-      Terminal::Operator.active_piece(board: location, cursor: cursor)
+      Terminal::Drawer.active_piece(board: location, cursor: cursor)
     end
 
     def deactive_piece(cursor)
@@ -106,7 +106,7 @@ module ConsoleShogi
 
       return if location.nil?
 
-      Terminal::Operator.deactive_piece(board: location, previous_cursor: cursor)
+      Terminal::Drawer.deactive_piece(board: location, previous_cursor: cursor)
     end
 
     def focus_piece(cursor)
@@ -114,7 +114,7 @@ module ConsoleShogi
 
       return if location.nil?
 
-      Terminal::Operator.focus_piece(board: location, cursor: cursor)
+      Terminal::Drawer.focus_piece(board: location, cursor: cursor)
     end
 
     def fetch_piece_location_object(cursor_location)
