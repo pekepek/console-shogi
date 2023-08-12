@@ -44,11 +44,11 @@ module ConsoleShogi
 
         # TODO history や infomation の扱いを整理する
         if area.outside?
-          {x: nil, y: nil, location: area}
+          {row: nil, column: nil, location: area}
         else
           {
-            x: (terminal_position.x - area.start_position.x) / HORIZONTAL_DISTANCE,
-            y: terminal_position.y - area.start_position.y,
+            row: (terminal_position.x - area.start_position.x) / HORIZONTAL_DISTANCE,
+            column: terminal_position.y - area.start_position.y,
             location: area
           }
         end

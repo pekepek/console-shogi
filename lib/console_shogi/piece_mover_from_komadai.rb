@@ -22,18 +22,18 @@ module ConsoleShogi
       return false unless to.location.board?
       return false unless can_drop?(piece: from_piece, to: to)
 
-      komadai.pick_up_piece!(x: from.x, y: from.y)
+      komadai.pick_up_piece!(row: from.row, column: from.column)
       board.put_piece!(piece: from_piece, to: to)
 
       true
     end
 
     def from_piece
-      @from_piece ||= komadai.fetch_piece(x: from.x, y: from.y)
+      @from_piece ||= komadai.fetch_piece(row: from.row, column: from.column)
     end
 
     def can_drop?(piece:, to:)
-      to_piece = board.fetch_piece(x: to.x, y: to.y)
+      to_piece = board.fetch_piece(row: to.row, column: to.column)
 
       return false unless to_piece.none?
 
@@ -45,7 +45,7 @@ module ConsoleShogi
 
     def nifu?(piece, to)
       piece.fu? &&
-        board.matrix.column(to.x).any? {|p| p.fu? && piece.teban == p.teban }
+        board.matrix.column(to.row).any? {|p| p.fu? && piece.teban == p.teban }
     end
   end
 end

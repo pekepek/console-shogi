@@ -16,30 +16,30 @@ module ConsoleShogi
       Board.new(pieces: pieces.map(&:dup).to_a)
     end
 
-    def within_range?(x:, y:)
-      case {x: x, y: y}
-      in x: 0..8, y: 0..8
+    def within_range?(row:, column:)
+      case {row: row, column: column}
+      in row: 0..8, column: 0..8
         true
       else
         false
       end
     end
 
-    def fetch_piece(x:, y:)
-      pieces[y, x]
+    def fetch_piece(row:, column:)
+      pieces[column, row]
     end
 
-    def promote_piece!(x:, y:)
-      @pieces[y, x] = pieces[y, x].promote
+    def promote_piece!(row:, column:)
+      @pieces[column, row] = pieces[column, row].promote
     end
 
     def put_piece!(piece:, to:)
-      @pieces[to[:y], to[:x]] = piece
+      @pieces[to[:column], to[:row]] = piece
     end
 
     def move_piece!(from:, to:)
-      @pieces[to[:y], to[:x]] = @pieces[from[:y], from[:x]]
-      @pieces[from[:y], from[:x]] = NonePiece.new
+      @pieces[to[:column], to[:row]] = @pieces[from[:column], from[:row]]
+      @pieces[from[:column], from[:row]] = NonePiece.new
     end
 
     private

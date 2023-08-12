@@ -16,8 +16,8 @@ module ConsoleShogi
       Komadai.new(pieces: pieces.map(&:dup).to_a)
     end
 
-    def fetch_piece(x:, y:)
-      pieces[y, x]
+    def fetch_piece(row:, column:)
+      pieces[column, row]
     end
 
     def put(piece:)
@@ -32,8 +32,8 @@ module ConsoleShogi
       @pieces = sort_pieces
     end
 
-    def pick_up_piece!(x:, y:)
-      @pieces[y, x] = NonePiece.new
+    def pick_up_piece!(row:, column:)
+      @pieces[column, row] = NonePiece.new
       @pieces = sort_pieces
     end
 

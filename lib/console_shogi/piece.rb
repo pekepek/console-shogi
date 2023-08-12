@@ -99,7 +99,7 @@ module ConsoleShogi
 
     def base_moves
       [
-        {x: 0, y: -1}
+        {row: 0, column: -1}
       ]
     end
 
@@ -117,7 +117,7 @@ module ConsoleShogi
 
     def base_moves
       (1..8).map {|n|
-        {x: 0, y: -1 * n}
+        {row: 0, column: -1 * n}
       }
     end
 
@@ -135,8 +135,8 @@ module ConsoleShogi
 
     def base_moves
       [
-        {x: 1, y: -2},
-        {x: -1, y: -2},
+        {row: 1, column: -2},
+        {row: -1, column: -2},
       ]
     end
 
@@ -154,11 +154,11 @@ module ConsoleShogi
 
     def base_moves
       [
-        {x: -1, y: -1},
-        {x: 0, y: -1},
-        {x: 1, y: -1},
-        {x: 1, y: 1},
-        {x: -1, y: 1}
+        {row: -1, column: -1},
+        {row: 0, column: -1},
+        {row: 1, column: -1},
+        {row: 1, column: 1},
+        {row: -1, column: 1}
       ]
     end
 
@@ -176,12 +176,12 @@ module ConsoleShogi
 
     def base_moves
       [
-        {x: -1, y: -1},
-        {x: 0, y: -1},
-        {x: 1, y: -1},
-        {x: 1, y: 0},
-        {x: -1, y: 0},
-        {x: 0, y: 1}
+        {row: -1, column: -1},
+        {row: 0, column: -1},
+        {row: 1, column: -1},
+        {row: 1, column: 0},
+        {row: -1, column: 0},
+        {row: 0, column: 1}
       ]
     end
 
@@ -196,10 +196,10 @@ module ConsoleShogi
     def base_moves
       (1..8).flat_map {|n|
         [
-          {x: -1 * n, y: -1 * n},
-          {x: 1 * n, y: -1 * n},
-          {x: -1 * n, y: 1 * n},
-          {x: 1 * n, y: 1 * n}
+          {row: -1 * n, column: -1 * n},
+          {row: 1 * n, column: -1 * n},
+          {row: -1 * n, column: 1 * n},
+          {row: 1 * n, column: 1 * n}
         ]
       }
     end
@@ -219,10 +219,10 @@ module ConsoleShogi
     def base_moves
       (1..8).flat_map {|n|
         [
-          {x: 0, y: -1 * n},
-          {x: 0, y: 1 * n},
-          {x: -1 * n, y: 0},
-          {x: 1 * n, y: 0}
+          {row: 0, column: -1 * n},
+          {row: 0, column: 1 * n},
+          {row: -1 * n, column: 0},
+          {row: 1 * n, column: 0}
         ]
       }
     end
@@ -241,14 +241,14 @@ module ConsoleShogi
 
     def base_moves
       [
-        {x: -1, y: -1},
-        {x: 0, y: -1},
-        {x: 1, y: -1},
-        {x: 1, y: 0},
-        {x: -1, y: 0},
-        {x: -1, y: 1},
-        {x: 0, y: 1},
-        {x: 1, y: 1}
+        {row: -1, column: -1},
+        {row: 0, column: -1},
+        {row: 1, column: -1},
+        {row: 1, column: 0},
+        {row: -1, column: 0},
+        {row: -1, column: 1},
+        {row: 0, column: 1},
+        {row: 1, column: 1}
       ]
     end
 
@@ -285,12 +285,12 @@ module ConsoleShogi
 
       def base_moves
         [
-          {x: -1, y: -1},
-          {x: 0, y: -1},
-          {x: 1, y: -1},
-          {x: 1, y: 0},
-          {x: -1, y: 0},
-          {x: 0, y: 1}
+          {row: -1, column: -1},
+          {row: 0, column: -1},
+          {row: 1, column: -1},
+          {row: 1, column: 0},
+          {row: -1, column: 0},
+          {row: 0, column: 1}
         ]
       end
     end
@@ -306,16 +306,16 @@ module ConsoleShogi
       def base_moves
         (1..8).flat_map {|n|
           [
-            {x: -1 * n, y: -1 * n},
-            {x: 1 * n, y: -1 * n},
-            {x: -1 * n, y: 1 * n},
-            {x: 1 * n, y: 1 * n}
+            {row: -1 * n, column: -1 * n},
+            {row: 1 * n, column: -1 * n},
+            {row: -1 * n, column: 1 * n},
+            {row: 1 * n, column: 1 * n}
           ]
         } + [
-          {x: 0, y: -1},
-          {x: 1, y: 0},
-          {x: -1, y: 0},
-          {x: 0, y: 1}
+          {row: 0, column: -1},
+          {row: 1, column: 0},
+          {row: -1, column: 0},
+          {row: 0, column: 1}
         ]
       end
     end
@@ -326,16 +326,16 @@ module ConsoleShogi
       def base_moves
         (1..8).flat_map {|n|
           [
-            {x: 0, y: -1 * n},
-            {x: 0, y: 1 * n},
-            {x: -1 * n, y: 0},
-            {x: 1 * n, y: 0}
+            {row: 0, column: -1 * n},
+            {row: 0, column: 1 * n},
+            {row: -1 * n, column: 0},
+            {row: 1 * n, column: 0}
           ]
         } + [
-          {x: -1, y: -1},
-          {x: 1, y: -1},
-          {x: -1, y: 1},
-          {x: 1, y: 1}
+          {row: -1, column: -1},
+          {row: 1, column: -1},
+          {row: -1, column: 1},
+          {row: 1, column: 1}
         ]
       end
     end

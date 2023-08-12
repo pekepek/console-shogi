@@ -89,7 +89,7 @@ module ConsoleShogi
         end
 
         def focus_piece(board:, cursor:)
-          piece = board.fetch_piece(x: cursor.grid_position.x, y: cursor.grid_position.y)
+          piece = board.fetch_piece(row: cursor.grid_position.row, column: cursor.grid_position.column)
 
           return if piece.nil?
 
@@ -101,7 +101,7 @@ module ConsoleShogi
         def deactive_piece(board:, previous_cursor:)
           print "\e[#{previous_cursor.terminal_position.y};#{previous_cursor.terminal_position.x}H"
 
-          piece = board.fetch_piece(x: previous_cursor.grid_position.x, y: previous_cursor.grid_position.y)
+          piece = board.fetch_piece(row: previous_cursor.grid_position.row, column: previous_cursor.grid_position.column)
 
           print_image(image: piece.image, height: image_height) unless piece.nil?
 
@@ -109,7 +109,7 @@ module ConsoleShogi
         end
 
         def active_piece(board:, cursor:)
-          piece = board.fetch_piece(x: cursor.grid_position.x, y: cursor.grid_position.y)
+          piece = board.fetch_piece(row: cursor.grid_position.row, column: cursor.grid_position.column)
 
           return if piece.nil?
 

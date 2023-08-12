@@ -9,21 +9,21 @@ module ConsoleShogi
     end
 
     def can_move?
-      return false unless board.within_range?(x: to[:x], y: to[:y])
+      return false unless board.within_range?(row: to[:row], column: to[:column])
 
-      diff = {x: to[:x] - from[:x], y: to[:y] - from[:y]}
+      diff = {row: to[:row] - from[:row], column: to[:column] - from[:column]}
 
-      return false if from_piece.moves.none? {|m| m[:x] == diff[:x] && m[:y] == diff[:y] }
+      return false if from_piece.moves.none? {|m| m[:row] == diff[:row] && m[:column] == diff[:column] }
 
       return false if from_piece.teban == to_piece.teban
 
       return true unless from_piece.can_move_long_distance?
 
-      distance = (diff[:x].nonzero? || diff[:y]).abs
-      element = [diff[:x] / distance, diff[:y] / distance]
+      distance = (diff[:row].nonzero? || diff[:column]).abs
+      element = [diff[:row] / distance, diff[:column] / distance]
 
       1.upto(distance - 1) do |d|
-        piece = board.fetch_piece(x: from[:x] + element[0] * d, y: from[:y] + element[1] * d)
+        piece = board.fetch_piece(row: from[:row] + element[0] * d, column: from[:column] + element[1] * d)
 
         return false unless piece.none?
       end
@@ -36,11 +36,11 @@ module ConsoleShogi
     attr_reader :board, :from, :to
 
     def from_piece
-      @from_piece ||= board.fetch_piece(x: from[:x], y: from[:y])
+      @from_piece ||= board.fetch_piece(row: from[:row], column: from[:column])
     end
 
     def to_piece
-      @to_piece ||= board.fetch_piece(x: to[:x], y: to[:y])
+      @to_piece ||= board.fetch_piece(row: to[:row], column: to[:column])
     end
   end
 end
