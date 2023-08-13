@@ -30,7 +30,7 @@ module ConsoleShogi
 
           piece = fetch_piece(teminal.last_cursor_on_grid)
 
-          # TODO 選択したピースは色を変えないようにしている。状態の持ち方を見直したい
+          # TODO イケてない直す
           unless teminal.selected_cursor&.same_position?(teminal.last_cursor_on_grid)
             piece = fetch_piece(teminal.last_cursor_on_grid)
             teminal.deactive_piece(piece, teminal.last_cursor_on_grid)
