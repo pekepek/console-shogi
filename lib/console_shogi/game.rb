@@ -14,10 +14,7 @@ module ConsoleShogi
 
       @game_histories = [{board: board.deep_copy, sente_komadai: sente_player.komadai.deep_copy, gote_komadai: gote_player.komadai.deep_copy}]
 
-      Terminal::Drawer.clear_scrren
-      Terminal::Drawer.print_board(board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
-      Terminal::Drawer.print_history_button
-      Terminal::Drawer.print_teban(teban_player.teban)
+      teminal.init_scrren(board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
     end
 
     def start
@@ -31,24 +28,30 @@ module ConsoleShogi
 
           teminal.move_cursor!(key)
 
+          piece = fetch_piece(teminal.last_cursor_on_grid)
+
           # TODO 選択したピースは色を変えないようにしている。状態の持ち方を見直したい
-          deactive_piece(teminal.last_cursor_on_grid) if teminal.selected_cursor&.grid_position != teminal.last_cursor_on_grid.grid_position
-          focus_piece(teminal.cursor) if teminal.selected_cursor&.grid_position != teminal.cursor.grid_position
+          unless teminal.selected_cursor&.same_position?(teminal.last_cursor_on_grid)
+            piece = fetch_piece(teminal.last_cursor_on_grid)
+            teminal.deactive_piece(piece, teminal.last_cursor_on_grid)
+          end
+
+          unless teminal.selected_cursor&.same_position?(teminal.cursor)
+            piece = fetch_piece(teminal.cursor)
+            teminal.focus_piece(piece)
+          end
         # NOTE Enter を押したら駒を移動
         elsif key == "\r"
           if teminal.cursor.grid_position.location.history?
-            GameHistory.new(game_histories: game_histories).start
+            # TODO 一旦 History は使えなくする。棋譜で履歴を遡れるように変更する。
+            # GameHistory.new(game_histories: game_histories).start
 
             next
           end
 
           if teminal.selected_cursor.nil?
-            # TODO PieceMover の can_move? と分散してしまっている気もする
-            next if teminal.cursor.grid_position.location.outside?
-
-            active_piece(teminal.cursor)
-
-            teminal.select_cursor!
+            piece = fetch_piece(teminal.cursor)
+            teminal.select_cursor!(piece)
           else
             next unless teminal.cursor.grid_position.location.board?
 
@@ -57,24 +60,23 @@ module ConsoleShogi
             piece_mover.move!
 
             if piece_mover.moved_piece?
-              Terminal::Drawer.print_diff_board(previous_board: game_histories.last[:board], board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
+              teminal.print_diff_board(previous_board: game_histories.last[:board], board: board, sente_komadai: sente_player.komadai, gote_komadai: gote_player.komadai)
 
               @game_histories << {board: board.deep_copy, sente_komadai: sente_player.komadai.deep_copy, gote_komadai: gote_player.komadai.deep_copy}
 
               if teban_player.win?
-                Terminal::Drawer.print_winner(teban_player)
+                teminal.print_winner(teban_player)
 
                 exit
               else
                 change_teban!
 
-                Terminal::Drawer.print_teban(teban_player.teban)
+                teminal.print_teban(teban_player.teban)
               end
-            else
-              deactive_piece(teminal.selected_cursor)
             end
 
-            teminal.deselect_cursor!
+            piece = fetch_piece(teminal.selected_cursor)
+            teminal.deselect_cursor!(piece)
           end
         end
       end
@@ -88,29 +90,11 @@ module ConsoleShogi
       @teban_player = teban_player == sente_player ? gote_player : sente_player
     end
 
-    # TODO ここらへんイケてないのでリファクタしたい
-    def active_piece(cursor)
-      location = fetch_piece_location_object(cursor.grid_position.location)
+    def fetch_piece(cursor)
+      return if cursor.grid_position.location.outside?
 
-      return if location.nil?
-
-      Terminal::Drawer.active_piece(board: location, cursor: cursor)
-    end
-
-    def deactive_piece(cursor)
-      location = fetch_piece_location_object(cursor.grid_position.location)
-
-      return if location.nil?
-
-      Terminal::Drawer.deactive_piece(board: location, previous_cursor: cursor)
-    end
-
-    def focus_piece(cursor)
-      location = fetch_piece_location_object(cursor.grid_position.location)
-
-      return if location.nil?
-
-      Terminal::Drawer.focus_piece(board: location, cursor: cursor)
+      piece_location = fetch_piece_location_object(cursor.grid_position.location)
+      piece = piece_location.fetch_piece(row: cursor.grid_position.row, column: cursor.grid_position.column)
     end
 
     def fetch_piece_location_object(cursor_location)

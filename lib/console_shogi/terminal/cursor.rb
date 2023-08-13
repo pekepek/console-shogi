@@ -17,17 +17,24 @@ module ConsoleShogi
       def move!(direction)
         return unless CURSOR_DIRECTIONS.include?(direction)
 
-        distance =
+        position =
           case direction
-          when 'A', 'B'
-            VERTICAL_DISTANCE
-          when 'C', 'D'
-            HORIZONTAL_DISTANCE
+          when 'A'
+            {x: terminal_position.x, y: [terminal_position.y - VERTICAL_DISTANCE, 1].max}
+          when 'B'
+            {x: terminal_position.x, y: terminal_position.y + VERTICAL_DISTANCE}
+          when 'C'
+            {x: terminal_position.x + HORIZONTAL_DISTANCE, y: terminal_position.y}
+          when 'D'
+            {x: [terminal_position.x - HORIZONTAL_DISTANCE, 1].max, y: terminal_position.y}
           end
 
-        print "\e[#{distance}#{direction}"
+        @terminal_position = TerminalPosition.new(**position)
+        @grid_position = GridPosition.new(**calculate_grid_position)
+      end
 
-        update_terminal_position!
+      def same_position?(other_cursor)
+        grid_position == other_cursor.grid_position
       end
 
       private
