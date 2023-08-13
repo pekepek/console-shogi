@@ -4,9 +4,11 @@ require 'base64'
 require 'tty-prompt'
 
 module ConsoleShogi
-  module Terminal
+  class Terminal
     class Drawer
       class << self
+        attr_accessor :cursor
+
         TEBAN = {
           sente: '先手',
           gote: '後手'
@@ -22,10 +24,6 @@ module ConsoleShogi
           MOVE_INFOMATION_AREA = "\e[#{DisplayArea::Infomation.start_position.y};#{DisplayArea::Infomation.start_position.x}H"
           CURRENT_POSITION = "\e[6n"
           MOVE_RIGHT_2 = "\e[2C"
-        end
-
-        def cursor
-          @cursor ||= Cursor.new
         end
 
         def image_height

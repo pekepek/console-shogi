@@ -1,5 +1,5 @@
 module ConsoleShogi
-  module Terminal
+  class Terminal
     class DisplayArea
       OTHERS = :others
       BOARD = :board

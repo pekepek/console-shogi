@@ -1,5 +1,5 @@
 module ConsoleShogi
-  module Terminal
+  class Terminal
     class Cursor
       TerminalPosition = Struct.new(:x, :y)
 
@@ -14,7 +14,7 @@ module ConsoleShogi
         @grid_position = GridPosition.new(**calculate_grid_position)
       end
 
-      def move(direction)
+      def move!(direction)
         return unless CURSOR_DIRECTIONS.include?(direction)
 
         distance =
